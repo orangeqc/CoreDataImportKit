@@ -10,6 +10,10 @@
 		1C40E6F41C6AC59A0044F2D3 /* CoreDataImportKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C40E6F31C6AC59A0044F2D3 /* CoreDataImportKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1C40E6FB1C6AC59A0044F2D3 /* CoreDataImportKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C40E6F01C6AC5990044F2D3 /* CoreDataImportKit.framework */; };
 		1C40E7001C6AC59A0044F2D3 /* CoreDataImportKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C40E6FF1C6AC59A0044F2D3 /* CoreDataImportKitTests.swift */; };
+		1C5645401C6BE63F007D0C24 /* CDICoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1C56453E1C6BE63F007D0C24 /* CDICoreData.xcdatamodeld */; };
+		1C5645431C6C0803007D0C24 /* Person+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5645411C6C0803007D0C24 /* Person+CoreDataProperties.swift */; };
+		1C5645441C6C0803007D0C24 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5645421C6C0803007D0C24 /* Person.swift */; };
+		1C5645471C6C0B86007D0C24 /* CDIMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5645461C6C0B86007D0C24 /* CDIMappingTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +33,10 @@
 		1C40E6FA1C6AC59A0044F2D3 /* CoreDataImportKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreDataImportKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C40E6FF1C6AC59A0044F2D3 /* CoreDataImportKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataImportKitTests.swift; sourceTree = "<group>"; };
 		1C40E7011C6AC59A0044F2D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1C56453F1C6BE63F007D0C24 /* CDICoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CDICoreData.xcdatamodel; sourceTree = "<group>"; };
+		1C5645411C6C0803007D0C24 /* Person+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Person+CoreDataProperties.swift"; path = "Models/Person+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1C5645421C6C0803007D0C24 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Person.swift; path = Models/Person.swift; sourceTree = "<group>"; };
+		1C5645461C6C0B86007D0C24 /* CDIMappingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIMappingTests.swift; path = Tests/CDIMappingTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +79,7 @@
 		1C40E6F21C6AC59A0044F2D3 /* CoreDataImportKit */ = {
 			isa = PBXGroup;
 			children = (
+				1C56453C1C6BE5C4007D0C24 /* Source */,
 				1C40E6F31C6AC59A0044F2D3 /* CoreDataImportKit.h */,
 				1C40E6F51C6AC59A0044F2D3 /* Info.plist */,
 			);
@@ -80,10 +89,45 @@
 		1C40E6FE1C6AC59A0044F2D3 /* CoreDataImportKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				1C5645451C6C0A95007D0C24 /* Tests */,
+				1C56453B1C6BE567007D0C24 /* Models */,
 				1C40E6FF1C6AC59A0044F2D3 /* CoreDataImportKitTests.swift */,
 				1C40E7011C6AC59A0044F2D3 /* Info.plist */,
 			);
 			path = CoreDataImportKitTests;
+			sourceTree = "<group>";
+		};
+		1C56453B1C6BE567007D0C24 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1C56453E1C6BE63F007D0C24 /* CDICoreData.xcdatamodeld */,
+				1C5645411C6C0803007D0C24 /* Person+CoreDataProperties.swift */,
+				1C5645421C6C0803007D0C24 /* Person.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		1C56453C1C6BE5C4007D0C24 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				1C56453D1C6BE5CB007D0C24 /* Core */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1C56453D1C6BE5CB007D0C24 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		1C5645451C6C0A95007D0C24 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				1C5645461C6C0B86007D0C24 /* CDIMappingTests.swift */,
+			);
+			name = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,6 +246,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				1C40E7001C6AC59A0044F2D3 /* CoreDataImportKitTests.swift in Sources */,
+				1C5645471C6C0B86007D0C24 /* CDIMappingTests.swift in Sources */,
+				1C5645401C6BE63F007D0C24 /* CDICoreData.xcdatamodeld in Sources */,
+				1C5645441C6C0803007D0C24 /* Person.swift in Sources */,
+				1C5645431C6C0803007D0C24 /* Person+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,6 +424,7 @@
 				1C40E7061C6AC59A0044F2D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1C40E7071C6AC59A0044F2D3 /* Build configuration list for PBXNativeTarget "CoreDataImportKitTests" */ = {
 			isa = XCConfigurationList;
@@ -384,8 +433,23 @@
 				1C40E7091C6AC59A0044F2D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1C56453E1C6BE63F007D0C24 /* CDICoreData.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1C56453F1C6BE63F007D0C24 /* CDICoreData.xcdatamodel */,
+			);
+			currentVersion = 1C56453F1C6BE63F007D0C24 /* CDICoreData.xcdatamodel */;
+			name = CDICoreData.xcdatamodeld;
+			path = Models/CDICoreData.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 1C40E6E71C6AC5990044F2D3 /* Project object */;
 }

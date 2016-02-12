@@ -14,6 +14,9 @@
 		1C5645431C6C0803007D0C24 /* Person+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5645411C6C0803007D0C24 /* Person+CoreDataProperties.swift */; };
 		1C5645441C6C0803007D0C24 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5645421C6C0803007D0C24 /* Person.swift */; };
 		1C5645471C6C0B86007D0C24 /* CDIMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5645461C6C0B86007D0C24 /* CDIMappingTests.swift */; };
+		1C5645491C6D414A007D0C24 /* CDIMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5645481C6D414A007D0C24 /* CDIMapping.swift */; };
+		1C56454C1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56454A1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift */; };
+		1C56454D1C6D6B5E007D0C24 /* Printer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56454B1C6D6B5E007D0C24 /* Printer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +40,9 @@
 		1C5645411C6C0803007D0C24 /* Person+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Person+CoreDataProperties.swift"; path = "Models/Person+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		1C5645421C6C0803007D0C24 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Person.swift; path = Models/Person.swift; sourceTree = "<group>"; };
 		1C5645461C6C0B86007D0C24 /* CDIMappingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIMappingTests.swift; path = Tests/CDIMappingTests.swift; sourceTree = "<group>"; };
+		1C5645481C6D414A007D0C24 /* CDIMapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIMapping.swift; path = Source/Core/CDIMapping.swift; sourceTree = "<group>"; };
+		1C56454A1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Printer+CoreDataProperties.swift"; path = "Models/Printer+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1C56454B1C6D6B5E007D0C24 /* Printer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Printer.swift; path = Models/Printer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +97,7 @@
 			children = (
 				1C5645451C6C0A95007D0C24 /* Tests */,
 				1C56453B1C6BE567007D0C24 /* Models */,
+				1C56454F1C6E95F3007D0C24 /* Utilities */,
 				1C40E6FF1C6AC59A0044F2D3 /* CoreDataImportKitTests.swift */,
 				1C40E7011C6AC59A0044F2D3 /* Info.plist */,
 			);
@@ -103,6 +110,8 @@
 				1C56453E1C6BE63F007D0C24 /* CDICoreData.xcdatamodeld */,
 				1C5645411C6C0803007D0C24 /* Person+CoreDataProperties.swift */,
 				1C5645421C6C0803007D0C24 /* Person.swift */,
+				1C56454A1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift */,
+				1C56454B1C6D6B5E007D0C24 /* Printer.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -118,6 +127,7 @@
 		1C56453D1C6BE5CB007D0C24 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				1C5645481C6D414A007D0C24 /* CDIMapping.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -128,6 +138,13 @@
 				1C5645461C6C0B86007D0C24 /* CDIMappingTests.swift */,
 			);
 			name = Tests;
+			sourceTree = "<group>";
+		};
+		1C56454F1C6E95F3007D0C24 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -238,6 +255,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C5645491C6D414A007D0C24 /* CDIMapping.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,7 +267,9 @@
 				1C5645471C6C0B86007D0C24 /* CDIMappingTests.swift in Sources */,
 				1C5645401C6BE63F007D0C24 /* CDICoreData.xcdatamodeld in Sources */,
 				1C5645441C6C0803007D0C24 /* Person.swift in Sources */,
+				1C56454C1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift in Sources */,
 				1C5645431C6C0803007D0C24 /* Person+CoreDataProperties.swift in Sources */,
+				1C56454D1C6D6B5E007D0C24 /* Printer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,6 +376,7 @@
 		1C40E7051C6AC59A0044F2D3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -366,12 +387,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.orangeqc.CoreDataImportKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		1C40E7061C6AC59A0044F2D3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

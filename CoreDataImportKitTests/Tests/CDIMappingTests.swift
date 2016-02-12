@@ -7,35 +7,14 @@
 //
 
 import XCTest
-import Foundation
 import CoreData
 
-class CDIMappingTests: XCTestCase {
+@testable import CoreDataImportKit
 
-    var managedObjectContext: NSManagedObjectContext?
-
+class CDIMappingTests: CoreDataImportKitTests {
 
     override func setUp() {
-        super.setUp()
-
-        // This resource is the same name as your xcdatamodeld contained in your project.
-        guard let modelURL = NSBundle(forClass: self.dynamicType).URLForResource("CDICoreData", withExtension:"momd") else {
-            fatalError("Error loading model from bundle")
-        }
-        // The managed object model for the application. It is a fatal error for the application not to be able to find and load its model.
-        guard let mom = NSManagedObjectModel(contentsOfURL: modelURL) else {
-            fatalError("Error initializing mom from: \(modelURL)")
-        }
-        let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
-        managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
-        managedObjectContext!.persistentStoreCoordinator = psc
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
-            do {
-                try psc.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
-            } catch {
-                fatalError("Error migrating store: \(error)")
-            }
-        }
+        super.setUp()       
     }
     
     override func tearDown() {
@@ -44,11 +23,74 @@ class CDIMappingTests: XCTestCase {
     }
     
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-
-        let userInfo = NSEntityDescription.entityForName("Person", inManagedObjectContext: managedObjectContext!)?.userInfo as! [String : AnyObject]
+        let userInfo = NSEntityDescription.entityForName("Person", inManagedObjectContext: managedObjectContext)?.userInfo as! [String : AnyObject]
         XCTAssertTrue(userInfo["relatedByAttribute"] as! String == "id")
     }
+
+    // MARK: entityName
+
+    func testEntityName() {
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        XCTAssertEqual(mapping.entityName, "Person")
+    }
+
+    // MARK: hasPrimaryKey
+
+    func testHasPrimaryKeyWhenKeyExists() {
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        XCTAssertTrue(mapping.hasPrimaryKey)
+    }
+
+    func testHasPrimaryKeyWhenKeyDoesNotExists() {
+        let mapping = CDIMapping(entityName: "Printer", inManagedObjectContext: managedObjectContext)
+        XCTAssertFalse(mapping.hasPrimaryKey)
+    }
+
+    // MARK: createManagedObjectWithRepresentation
+
+    func testCreateManagedObjectWithRepresentation() {
+        let representation = [ "id": 123, "name": "John Doe", "age": 35 ]
+
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        let managedObject = mapping.createManagedObjectWithRepresentation(representation)
+
+        XCTAssertEqual(managedObject.entity.name!, "Person")
+
+        if let person = managedObject as? Person {
+            XCTAssertEqual(person.id, 123)
+            XCTAssertNil(person.name)
+        }
+        else {
+            XCTFail("Unable to create person")
+        }
+    }
+
+    func testCreateManagedObjectWithRepresentationForEntityWithNoPrimaryKey() {
+        let representation = [ "name": "Big Store Printer" ]
+
+        let mapping = CDIMapping(entityName: "Printer", inManagedObjectContext: managedObjectContext)
+        let managedObject = mapping.createManagedObjectWithRepresentation(representation)
+
+        XCTAssertEqual(managedObject.entity.name!, "Printer")
+
+        if let printer = managedObject as? Printer {
+            XCTAssertNil(printer.name)
+        }
+        else {
+            XCTFail("Unable to create printer")
+        }
+    }
+
+    // MARK: updateManagedObjectAttributes:withRepresentation:
+
+    func testUpdateManagedObjectAttributesWithRepresentation() {
+        
+    }
+
+//    `updateEntityAttributes(entity withRepresentation:rep)` - Updates an existing entity with the attributes in the representation. Makes sure values are new before setting them.
+//    `extractRootFromExternalRepresentation(rep)` - Returns dictionary or array based on the representation.
+//    `primaryKeyValueForRepresentation(rep)` - Returns the value of the primary key
+//    `relationshipsForEntity()` - Not 100% positive about this one yet. Will need to see implimentation of cache/import first. Should allow it to loop over the relationships, but don't know what data it will need yet.
+//    `mappingForRelationship()` - Again, not positive about this yet. But might need for a mapping to create a mapping for a different entity based on the relationship.
 
 }

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C1B24261C73F95C00F1EE2E /* CDIManagedObjectCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B24251C73F95C00F1EE2E /* CDIManagedObjectCache.swift */; };
+		1C1B24281C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B24271C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift */; };
+		1C1B242D1C752AEB00F1EE2E /* CDIRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B242C1C752AEB00F1EE2E /* CDIRepresentation.swift */; };
 		1C40E6F41C6AC59A0044F2D3 /* CoreDataImportKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C40E6F31C6AC59A0044F2D3 /* CoreDataImportKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1C40E6FB1C6AC59A0044F2D3 /* CoreDataImportKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C40E6F01C6AC5990044F2D3 /* CoreDataImportKit.framework */; };
 		1C40E7001C6AC59A0044F2D3 /* CoreDataImportKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C40E6FF1C6AC59A0044F2D3 /* CoreDataImportKitTests.swift */; };
@@ -30,6 +33,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1C1B24251C73F95C00F1EE2E /* CDIManagedObjectCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIManagedObjectCache.swift; path = Source/Core/CDIManagedObjectCache.swift; sourceTree = "<group>"; };
+		1C1B24271C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIManagedObjectCacheTests.swift; path = Tests/CDIManagedObjectCacheTests.swift; sourceTree = "<group>"; };
+		1C1B242C1C752AEB00F1EE2E /* CDIRepresentation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIRepresentation.swift; path = Utility/CDIRepresentation.swift; sourceTree = "<group>"; };
 		1C40E6F01C6AC5990044F2D3 /* CoreDataImportKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreDataImportKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C40E6F31C6AC59A0044F2D3 /* CoreDataImportKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataImportKit.h; sourceTree = "<group>"; };
 		1C40E6F51C6AC59A0044F2D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -64,6 +70,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1C1B24291C73FE5A00F1EE2E /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				1C1B242C1C752AEB00F1EE2E /* CDIRepresentation.swift */,
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
 		1C40E6E61C6AC5990044F2D3 = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				1C56453D1C6BE5CB007D0C24 /* Core */,
+				1C1B24291C73FE5A00F1EE2E /* Utility */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -128,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				1C5645481C6D414A007D0C24 /* CDIMapping.swift */,
+				1C1B24251C73F95C00F1EE2E /* CDIManagedObjectCache.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -136,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				1C5645461C6C0B86007D0C24 /* CDIMappingTests.swift */,
+				1C1B24271C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -255,6 +272,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C1B242D1C752AEB00F1EE2E /* CDIRepresentation.swift in Sources */,
+				1C1B24261C73F95C00F1EE2E /* CDIManagedObjectCache.swift in Sources */,
 				1C5645491C6D414A007D0C24 /* CDIMapping.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -267,6 +286,7 @@
 				1C5645471C6C0B86007D0C24 /* CDIMappingTests.swift in Sources */,
 				1C5645401C6BE63F007D0C24 /* CDICoreData.xcdatamodeld in Sources */,
 				1C5645441C6C0803007D0C24 /* Person.swift in Sources */,
+				1C1B24281C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift in Sources */,
 				1C56454C1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift in Sources */,
 				1C5645431C6C0803007D0C24 /* Person+CoreDataProperties.swift in Sources */,
 				1C56454D1C6D6B5E007D0C24 /* Printer.swift in Sources */,

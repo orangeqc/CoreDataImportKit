@@ -106,6 +106,15 @@ public class CDIMapping {
         }
     }
 
+    public func primaryKeyValueForManagedObject(object: NSManagedObject) -> NSObject? {
+        if let primaryKeyAttribute = primaryKeyAttributeForEntity(object.entity) {
+            return object.valueForKey(primaryKeyAttribute) as? NSObject
+        }
+        else {
+            return nil
+        }
+    }
+
     /**
      Returns an array of dictionaries which represent objects to be imported. 
      This method returns what it is given. It is intended to be overwritten by 

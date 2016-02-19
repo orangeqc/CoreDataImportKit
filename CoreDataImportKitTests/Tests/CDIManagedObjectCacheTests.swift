@@ -25,10 +25,7 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
     // MARK: buildCacheForBaseEntity()
 
     func testBuildCacheForBaseEntity() {
-        let representation = [
-            [ "id": 123, "name": "John Doe", "age": 35 ],
-            [ "id": 124, "name": "John Doe", "age": 35 ]
-        ]
+        let representation = [ [ "id": 123 ], [ "id": 124 ] ]
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let managedObject = mapping.createManagedObjectWithRepresentation(representation[0])
@@ -58,8 +55,8 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
 
     func testBuildCacheForRelatedEntities() {
         let representation = [
-            [ "id": 123, "name": "John Doe", "age": 35, "companyId": 5 ],
-            [ "id": 124, "name": "John Doe", "age": 35, "companyId": 5 ]
+            [ "id": 123, "companyId": 5 ],
+            [ "id": 124, "companyId": 5 ]
         ]
 
         let companyMapping = CDIMapping(entityName: "Company", inManagedObjectContext: managedObjectContext)
@@ -82,5 +79,67 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
         XCTAssertEqual(companyPrimaryKey, "id")
 
         XCTAssertEqual(cachedCompanyObject, companyObject)
+    }
+
+    // TODO: Make sure there are correct error messages / asserts for wrong userInfo key names
+
+    // MARK: managedObjectExistsForRepresentation()
+
+    func testManagedObjectExistsForRepresentationThatExists() {
+        let representation = [ [ "id": 123 ], [ "id": 124 ] ]
+
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        let managedObject = mapping.createManagedObjectWithRepresentation(representation[0])
+
+        let cache = CDIManagedObjectCache(externalRepresentation: representation, mapping: mapping, context: managedObjectContext)
+
+        cache.buildCacheForBaseEntity()
+
+        guard let cachedObject = cache.managedObjectForEntity(mapping.entityName, primaryKeyValue: 123) else {
+                XCTFail()
+                return
+        }
+
+        XCTAssertEqual(cachedObject, managedObject)
+    }
+
+    func testManagedObjectExistsForRepresentationThatDoesNotExist() {
+        let representation = [ [ "id": 123 ], [ "id": 124 ] ]
+
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+
+        let cache = CDIManagedObjectCache(externalRepresentation: representation, mapping: mapping, context: managedObjectContext)
+
+        cache.buildCacheForBaseEntity()
+
+        if let _ = cache.managedObjectForEntity(mapping.entityName, primaryKeyValue: 124) {
+            XCTFail()
+        }
+    }
+
+    // MARK: addManagedObject()
+
+    func testAddManagedObject() {
+        let representation = [ [ "id": 123 ], [ "id": 124 ] ]
+
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+
+        let cache = CDIManagedObjectCache(externalRepresentation: representation, mapping: mapping, context: managedObjectContext)
+
+        cache.buildCacheForBaseEntity()
+
+        if let _ = cache.managedObjectForEntity(mapping.entityName, primaryKeyValue: 123) {
+            XCTFail()
+        }
+
+        let managedObject = mapping.createManagedObjectWithRepresentation(representation[0])
+        cache.addManagedObjectToCache(managedObject)
+
+        if let cachedObject = cache.managedObjectForEntity(mapping.entityName, primaryKeyValue: 123) {
+            XCTAssertEqual(managedObject, cachedObject)
+        }
+        else {
+            XCTFail()
+        }
     }
 }

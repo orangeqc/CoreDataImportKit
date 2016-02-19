@@ -12,7 +12,7 @@ import CoreData
 public class CDIManagedObjectCache {
 
     /// `objectCache[entityName][primaryKeyValue] = entity`
-    var objectCache: [ String: [ Int : NSManagedObject ] ]
+    var objectCache: [ String: [ NSObject : NSManagedObject ] ]
 
     /// `primaryKeyCache[entityName] = primaryKeyAttribute`
     var primaryKeyCache: [ String: String ]
@@ -101,12 +101,15 @@ public class CDIManagedObjectCache {
     }
 
     /// Checks to see if a managed object has been cached already. Should to an internal validation check to make sure that building the cache has happened already.
-    public func managedObjectExistsForRepresentation(representation: CDIRepresentation, mapping: CDIMapping) -> Bool {
-        return false;
+    public func managedObjectForEntity(entityName: String, primaryKeyValue: NSObject) -> NSManagedObject? {
+        return objectCache[entityName]?[primaryKeyValue];
     }
 
-    public func addManagedObject(managedObject: NSManagedObject, mapping: CDIMapping) {
-
+    // TODO: Assumes the base value has already been set, otherwise won't cache object
+    public func addManagedObjectToCache(managedObject: NSManagedObject) {
+        if let entityName = managedObject.entity.name, primaryKeyValue = mapping.primaryKeyValueForManagedObject(managedObject) {
+            objectCache[entityName]?.updateValue(managedObject, forKey: primaryKeyValue)
+        }
     }
 
     // MARK: Private Methods
@@ -121,7 +124,6 @@ public class CDIManagedObjectCache {
         }
     }
 
-    // TODO: Fetch based on entity name
     func fetchExistingObjectsForEntity(entityName: String) {
         // Make sure we have the primaryKeys and the primaryKey for the entity in question
         guard let primaryKeys = primaryKeysCache[entityName], let primaryKey = primaryKeyCache[entityName] else {
@@ -143,7 +145,7 @@ public class CDIManagedObjectCache {
         do {
             let existingObjects = try context.executeFetchRequest(fetchRequest)
             for object in existingObjects {
-                let primaryKeyForObject = object.valueForKey(primaryKey) as! Int
+                let primaryKeyForObject = object.valueForKey(primaryKey) as! NSObject
                 objectCache[entityName]?.updateValue(object as! NSManagedObject, forKey: primaryKeyForObject)
             }
         }

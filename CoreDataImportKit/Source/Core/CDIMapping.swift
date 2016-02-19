@@ -79,7 +79,7 @@ public class CDIMapping {
      - parameter managedObject:  NSManagedObject to update.
      - parameter representation: Dictionary to use to update the attributes.
      */
-    public func updateManagedObjectAttributes(managedObject: NSManagedObject, withRepresentation representation: [ String : AnyObject ]) {
+    public func updateManagedObjectAttributes(managedObject: NSManagedObject, withRepresentation representation: CDIRepresentation) {
         for (attributeName, attributeDescription) in entityDescription.attributesByName {
             if let representationValue = representation[lookupKeyForProperty(attributeDescription)] {
                 // TODO: Only set value if they are actually different

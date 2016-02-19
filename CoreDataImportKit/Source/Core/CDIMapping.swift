@@ -43,9 +43,10 @@ public class CDIMapping {
 
         let description = NSEntityDescription.entityForName(entityName, inManagedObjectContext: context)
         assert(description != nil)
-        self.entityDescription = description!
+        entityDescription = description!
 
-        self.primaryKey = entityDescription.userInfo?["relatedByAttribute"] as? String
+        // TODO: figure out why I can't use `primaryKeyAttributeForEntity(entityDescription)` here
+        primaryKey = entityDescription.userInfo?["relatedByAttribute"] as? String
     }
 
     /**
@@ -79,18 +80,26 @@ public class CDIMapping {
      - parameter representation: Dictionary to use to update the attributes.
      */
     public func updateManagedObjectAttributes(managedObject: NSManagedObject, withRepresentation representation: [ String : AnyObject ]) {
-
         for (attributeName, attributeDescription) in entityDescription.attributesByName {
-            if let representationValue = representation[lookupKeyForAttribute(attributeDescription)] {
+            if let representationValue = representation[lookupKeyForProperty(attributeDescription)] {
                 // TODO: Only set value if they are actually different
                 managedObject.setValue(representationValue, forKey: attributeName)
             }
         }
     }
 
-    public func primaryKeyValueFromRepresentation(representation: CDIRepresentation) -> AnyObject? {
+    public func primaryKeyValueFromRepresentation(representation: CDIRepresentation) -> NSObject? {
         if let attribute = entityDescription.attributesByName[primaryKey!] {
-            return representation[lookupKeyForAttribute(attribute)]
+            return representation[lookupKeyForProperty(attribute)]
+        }
+        else {
+            return nil
+        }
+    }
+
+    public func primaryKeyValueFromRepresentation(representation: CDIRepresentation, forRelationship relationshipName: String) -> NSObject? {
+        if let relationship = entityDescription.relationshipsByName[relationshipName] {
+            return representation[lookupKeyForProperty(relationship)]
         }
         else {
             return nil
@@ -114,23 +123,34 @@ public class CDIMapping {
         return externalRepresentation;
     }
 
+    public var relationshipsByName: [String : NSRelationshipDescription] {
+        get {
+            return entityDescription.relationshipsByName
+        }
+    }
+
     // MARK: Private Methods
 
+
     /**
-     Private function used to look up which key should be used to look up the value in a representation.
+    Function used to look up which key should be used to look up the value in a representation.
 
-     - parameter attribute: NSAttributeDescription of the attribute
+    - parameter attribute: NSAttributeDescription of the attribute
 
-     - returns: String to look up the attribute in the representation
-     */
+    - returns: String to look up the attribute in the representation
+    */
     // TODO: Instead of a single string, return array of possible look up keys
-    func lookupKeyForAttribute(attribute: NSAttributeDescription) -> String {
-        if let userInfo = attribute.userInfo {
+    func lookupKeyForProperty(property: NSPropertyDescription) -> String {
+        if let userInfo = property.userInfo {
             if let mappedKeyName = userInfo["mappedKeyName"] as? String {
                 return mappedKeyName
             }
         }
 
-        return attribute.name
+        return property.name
+    }
+
+    func primaryKeyAttributeForEntity(entity: NSEntityDescription) -> String? {
+        return entity.userInfo?["relatedByAttribute"] as? String
     }
 }

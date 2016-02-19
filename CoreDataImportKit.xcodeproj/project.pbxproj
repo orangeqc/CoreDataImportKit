@@ -20,6 +20,8 @@
 		1C5645491C6D414A007D0C24 /* CDIMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5645481C6D414A007D0C24 /* CDIMapping.swift */; };
 		1C56454C1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56454A1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift */; };
 		1C56454D1C6D6B5E007D0C24 /* Printer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56454B1C6D6B5E007D0C24 /* Printer.swift */; };
+		1CA27E011C767B83005E379B /* Company+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA27DFF1C767B83005E379B /* Company+CoreDataProperties.swift */; };
+		1CA27E021C767B83005E379B /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA27E001C767B83005E379B /* Company.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		1C5645481C6D414A007D0C24 /* CDIMapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIMapping.swift; path = Source/Core/CDIMapping.swift; sourceTree = "<group>"; };
 		1C56454A1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Printer+CoreDataProperties.swift"; path = "Models/Printer+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		1C56454B1C6D6B5E007D0C24 /* Printer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Printer.swift; path = Models/Printer.swift; sourceTree = "<group>"; };
+		1CA27DFF1C767B83005E379B /* Company+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Company+CoreDataProperties.swift"; path = "Models/Company+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1CA27E001C767B83005E379B /* Company.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Company.swift; path = Models/Company.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,7 @@
 				1C5645451C6C0A95007D0C24 /* Tests */,
 				1C56453B1C6BE567007D0C24 /* Models */,
 				1C56454F1C6E95F3007D0C24 /* Utilities */,
+				1CA27E031C767BA5005E379B /* Fixtures */,
 				1C40E6FF1C6AC59A0044F2D3 /* CoreDataImportKitTests.swift */,
 				1C40E7011C6AC59A0044F2D3 /* Info.plist */,
 			);
@@ -126,6 +131,8 @@
 				1C5645421C6C0803007D0C24 /* Person.swift */,
 				1C56454A1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift */,
 				1C56454B1C6D6B5E007D0C24 /* Printer.swift */,
+				1CA27DFF1C767B83005E379B /* Company+CoreDataProperties.swift */,
+				1CA27E001C767B83005E379B /* Company.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -162,6 +169,13 @@
 			children = (
 			);
 			name = Utilities;
+			sourceTree = "<group>";
+		};
+		1CA27E031C767BA5005E379B /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Fixtures;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,8 +299,10 @@
 				1C40E7001C6AC59A0044F2D3 /* CoreDataImportKitTests.swift in Sources */,
 				1C5645471C6C0B86007D0C24 /* CDIMappingTests.swift in Sources */,
 				1C5645401C6BE63F007D0C24 /* CDICoreData.xcdatamodeld in Sources */,
+				1CA27E021C767B83005E379B /* Company.swift in Sources */,
 				1C5645441C6C0803007D0C24 /* Person.swift in Sources */,
 				1C1B24281C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift in Sources */,
+				1CA27E011C767B83005E379B /* Company+CoreDataProperties.swift in Sources */,
 				1C56454C1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift in Sources */,
 				1C5645431C6C0803007D0C24 /* Person+CoreDataProperties.swift in Sources */,
 				1C56454D1C6D6B5E007D0C24 /* Printer.swift in Sources */,

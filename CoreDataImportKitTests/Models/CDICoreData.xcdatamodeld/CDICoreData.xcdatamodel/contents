@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Xcode 7.0">
+    <entity name="Company" representedClassName=".Company" syncable="YES">
+        <attribute name="founded" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="employees" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Person" inverseName="job" inverseEntity="Person" syncable="YES"/>
+        <userInfo>
+            <entry key="relatedByAttribute" value="id"/>
+        </userInfo>
+    </entity>
     <entity name="Person" representedClassName=".Person" syncable="YES">
         <attribute name="age" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -8,6 +17,11 @@
                 <entry key="mappedKeyName" value="fullName"/>
             </userInfo>
         </attribute>
+        <relationship name="job" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Company" inverseName="employees" inverseEntity="Company" syncable="YES">
+            <userInfo>
+                <entry key="mappedKeyName" value="companyId"/>
+            </userInfo>
+        </relationship>
         <userInfo>
             <entry key="relatedByAttribute" value="id"/>
         </userInfo>
@@ -16,7 +30,8 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Person" positionX="-63" positionY="-18" width="128" height="90"/>
+        <element name="Person" positionX="-63" positionY="-18" width="128" height="105"/>
         <element name="Printer" positionX="-54" positionY="18" width="128" height="60"/>
+        <element name="Company" positionX="-54" positionY="9" width="128" height="105"/>
     </elements>
 </model>

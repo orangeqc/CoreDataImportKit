@@ -22,34 +22,65 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
     }
 
 
-    // MARK: buildCacheForBaseEntity
+    // MARK: buildCacheForBaseEntity()
 
     func testBuildCacheForBaseEntity() {
         let representation = [
             [ "id": 123, "name": "John Doe", "age": 35 ],
             [ "id": 124, "name": "John Doe", "age": 35 ]
         ]
-        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
 
-        let cache = CDIManagedObjectCache(externalRepresentation: representation, mapping: mapping)
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        let managedObject = mapping.createManagedObjectWithRepresentation(representation[0])
+
+        let cache = CDIManagedObjectCache(externalRepresentation: representation, mapping: mapping, context: managedObjectContext)
 
         cache.buildCacheForBaseEntity()
 
-        if let personPrimaryKeys = cache.primaryKeysCache["Person"] as? [Int] {
-            XCTAssertTrue(personPrimaryKeys.contains(123))
-            XCTAssertTrue(personPrimaryKeys.contains(124))
-        }
-        else {
-            XCTFail()
-        }
-
-        if let personPrimaryKey = cache.primaryKeyCache["Person"] {
-            XCTAssertEqual(personPrimaryKey, "id")
-        }
-        else {
-            XCTFail()
+        guard let   personPrimaryKeys   = cache.primaryKeysCache["Person"] as? Set<Int>,
+                    personPrimaryKey    = cache.primaryKeyCache["Person"],
+                    cachedObject        = cache.objectCache["Person"]?[123] else {
+                XCTFail()
+                return
         }
 
-        // TODO: Make sure actual objects are looked up
+        XCTAssertTrue(personPrimaryKeys.contains(123))
+        XCTAssertTrue(personPrimaryKeys.contains(124))
+
+        XCTAssertEqual(personPrimaryKey, "id")
+
+        XCTAssertEqual(cachedObject, managedObject)
+    }
+
+    // TODO: Write test where there is no object
+
+    // MARK: buildCacheForRelatedEntities()
+
+    func testBuildCacheForRelatedEntities() {
+        let representation = [
+            [ "id": 123, "name": "John Doe", "age": 35, "companyId": 5 ],
+            [ "id": 124, "name": "John Doe", "age": 35, "companyId": 5 ]
+        ]
+
+        let companyMapping = CDIMapping(entityName: "Company", inManagedObjectContext: managedObjectContext)
+        let companyObject = companyMapping.createManagedObjectWithRepresentation([ "id": 5 ])
+
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        let cache = CDIManagedObjectCache(externalRepresentation: representation, mapping: mapping, context: managedObjectContext)
+
+        cache.buildCacheForRelatedEntities()
+
+        guard let   companyPrimaryKeys   = cache.primaryKeysCache["Company"] as? Set<Int>,
+            companyPrimaryKey    = cache.primaryKeyCache["Company"],
+            cachedCompanyObject  = cache.objectCache["Company"]?[5] else {
+                XCTFail()
+                return
+        }
+
+        XCTAssertTrue(companyPrimaryKeys.contains(5))
+
+        XCTAssertEqual(companyPrimaryKey, "id")
+
+        XCTAssertEqual(cachedCompanyObject, companyObject)
     }
 }

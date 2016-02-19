@@ -1,5 +1,5 @@
 //
-//  Person+CoreDataProperties.swift
+//  Company+CoreDataProperties.swift
 //  CoreDataImportKit
 //
 //  Created by Ryan Mathews on 2/19/16.
@@ -12,11 +12,11 @@
 import Foundation
 import CoreData
 
-extension Person {
+extension Company {
 
-    @NSManaged var age: NSNumber?
-    @NSManaged var id: NSNumber?
     @NSManaged var name: String?
-    @NSManaged var job: Company?
+    @NSManaged var founded: String?
+    @NSManaged var id: NSNumber?
+    @NSManaged var employees: NSSet?
 
 }

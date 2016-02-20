@@ -24,11 +24,6 @@ public class CDIImport {
     }
 
     public func importAttributes() {
-        // Ask cache to build cache of existing objects
-        // loop over array in representation
-            // ask cache if it exsists
-            // if it doesn't, create it
-            // update attributes
         cache.buildCacheForBaseEntity()
         let rootRepresentation = mapping.extractRootFromExternalRepresentation(externalRepresentation)
 
@@ -70,6 +65,61 @@ public class CDIImport {
             // ask cache if it exsists
             // if it doesn't, create it
             // update relationship
+        cache.buildCacheForRelatedEntities()
+        let rootRepresentation = mapping.extractRootFromExternalRepresentation(externalRepresentation)
+
+        var representationArray: CDIRepresentationArray = []
+        if let array = rootRepresentation as? CDIRepresentationArray {
+            representationArray = array
+        }
+        else if let representation = rootRepresentation as? CDIRepresentation {
+            representationArray = [ representation ]
+        }
+
+        representationLoop: for representation in representationArray {
+            var managedObjectOptional: NSManagedObject?
+
+            // Ask the cache for the managed object
+            if let primaryKeyValue = mapping.primaryKeyValueFromRepresentation(representation) {
+                managedObjectOptional = cache.managedObjectForEntity(mapping.entityName, primaryKeyValue: primaryKeyValue)
+            }
+
+            guard let managedObject = managedObjectOptional else {
+                print("Issue with finding the managed object when building relationships.")
+                continue representationLoop
+            }
+
+            // Build relationships for the managed object
+            relationshipLoop: for (relationship, relationshipDescription) in mapping.relationshipsByName {
+
+                guard let relatedEntityName = relationshipDescription.destinationEntity?.name else {
+                    print("Related entity has no entity name")
+                    continue relationshipLoop
+                }
+
+                var relatedManagedObject: NSManagedObject?
+
+                // Ask the cache for the managed object
+                if let primaryKeyValue = mapping.primaryKeyValueFromRepresentation(representation, forRelationship: relationship) {
+                    relatedManagedObject = cache.managedObjectForEntity(relatedEntityName, primaryKeyValue: primaryKeyValue)
+                }
+
+                // If it doesn't exist, create one and add to the cache
+                if relatedManagedObject == nil {
+                    relatedManagedObject = mapping.createManagedObjectWithRepresentation(representation, forRelationship: relationship)
+                    if let mo = relatedManagedObject {
+                        cache.addManagedObjectToCache(mo)
+                    }
+                }
+
+                // Update relationship
+                if let mo = relatedManagedObject {
+                    managedObject.setValue(mo, forKey: relationship)
+                }
+
+            }
+
+        }
     }
 
 }

@@ -66,10 +66,10 @@ public class CDIManagedObjectCache {
         // Build base values and set primaryKeyCache
         for relationshipDescription in mapping.relationshipsByName.values {
             if let entity = relationshipDescription.destinationEntity {
-                if let primaryKeyAttribute = mapping.primaryKeyAttributeForEntity(entity), entityName = entity.name {
+                if let primaryKeyAttributeName = mapping.primaryKeyAttributeNameForEntity(entity), entityName = entity.name {
 
                     // This is the attribute we'll use to look up the managed object later
-                    primaryKeyCache[entityName] = primaryKeyAttribute
+                    primaryKeyCache[entityName] = primaryKeyAttributeName
 
                     // Setting an empty set for the primary keys that will be collected next
                     primaryKeysCache[entityName] = []

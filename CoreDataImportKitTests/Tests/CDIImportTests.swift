@@ -53,7 +53,71 @@ class CDIImportTests: CoreDataImportKitTests {
     // MARK: buildRelationships()
 
     func testBuildRelationships() {
+        let externalRepresentation = [ [ "id" : 1, "fullName" : "John Smith", "age": 30, "companyId": 5 ] ]
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
 
+        cdiImport.importAttributes()
+        cdiImport.buildRelationships()
+
+        // Look up user
+        let fetchRequest = NSFetchRequest(entityName: "Person")
+        let predicate = NSPredicate(format: "id = \(1)")
+        fetchRequest.predicate = predicate
+
+        let companyFetchRequest = NSFetchRequest(entityName: "Company")
+        let companyPredicate = NSPredicate(format: "id = \(5)")
+        companyFetchRequest.predicate = companyPredicate
+
+        do {
+            if let person = try managedObjectContext.executeFetchRequest(fetchRequest).first as? Person,
+                company = try managedObjectContext.executeFetchRequest(companyFetchRequest).first as? Company {
+                XCTAssertEqual(company.id, 5)
+                XCTAssertEqual(person.job, company)
+            }
+            else {
+                XCTFail()
+            }
+        }
+        catch {
+            XCTFail()
+        }
+    }
+
+    func testBuildRelationshipsWithAlreadyExitingObject() {
+        let c = NSEntityDescription.insertNewObjectForEntityForName("Company", inManagedObjectContext: managedObjectContext) as! Company
+        c.id = 5
+
+        let externalRepresentation = [ [ "id" : 1, "fullName" : "John Smith", "age": 30, "companyId": 5 ] ]
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
+
+        cdiImport.importAttributes()
+        cdiImport.buildRelationships()
+
+        // Look up user
+        let fetchRequest = NSFetchRequest(entityName: "Person")
+        let predicate = NSPredicate(format: "id = \(1)")
+        fetchRequest.predicate = predicate
+
+        let companyFetchRequest = NSFetchRequest(entityName: "Company")
+        let companyPredicate = NSPredicate(format: "id = \(5)")
+        companyFetchRequest.predicate = companyPredicate
+
+        do {
+            if let person = try managedObjectContext.executeFetchRequest(fetchRequest).first as? Person,
+                company = try managedObjectContext.executeFetchRequest(companyFetchRequest).first as? Company {
+                    XCTAssertEqual(company.id, 5)
+                    XCTAssertEqual(person.job, company)
+                    XCTAssertEqual(c, company)
+            }
+            else {
+                XCTFail()
+            }
+        }
+        catch {
+            XCTFail()
+        }
     }
 
 }

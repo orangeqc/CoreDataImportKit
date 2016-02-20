@@ -72,6 +72,27 @@ public class CDIMapping {
         return object
     }
 
+    public func createManagedObjectWithRepresentation(representation: CDIRepresentation, forRelationship relationshipName: String) -> NSManagedObject? {
+        let relationshipDescription = entityDescription.relationshipsByName[relationshipName]
+
+        if let entityName = relationshipDescription?.destinationEntity?.name {
+
+            let object = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: context)
+
+            // Look up the primary key and its value in the representation, then set it on the object
+            if let primaryKeyAttributeName = primaryKeyAttributeNameForEntity(object.entity),
+                representationValue = valueFromRepresentation(representation, forPropertyNamed: relationshipName) {
+
+                object.setValue(representationValue, forKey: primaryKeyAttributeName)
+
+            }
+
+            return object
+        }
+
+        return nil
+    }
+
     /**
      This method goes through all the attributes in the entity and updates the managed object
      if the representation includes a value for that attribute.
@@ -89,25 +110,40 @@ public class CDIMapping {
     }
 
     public func primaryKeyValueFromRepresentation(representation: CDIRepresentation) -> NSObject? {
-        if let attribute = entityDescription.attributesByName[primaryKey!] {
-            return representation[lookupKeyForProperty(attribute)]
-        }
-        else {
-            return nil
-        }
+        return valueFromRepresentation(representation, forPropertyNamed: primaryKey!)
+//        if let attribute = entityDescription.attributesByName[primaryKey!] {
+//            return representation[lookupKeyForProperty(attribute)]
+//        }
+//        else {
+//            return nil
+//        }
     }
 
     public func primaryKeyValueFromRepresentation(representation: CDIRepresentation, forRelationship relationshipName: String) -> NSObject? {
-        if let relationship = entityDescription.relationshipsByName[relationshipName] {
-            return representation[lookupKeyForProperty(relationship)]
+//        if let relationship = entityDescription.relationshipsByName[relationshipName] {
+//            return representation[lookupKeyForProperty(relationship)]
+//        }
+//        else {
+//            return nil
+//        }
+        return valueFromRepresentation(representation, forPropertyNamed: relationshipName)
+    }
+
+    public func valueFromRepresentation(representation: CDIRepresentation, forPropertyNamed propertyName: String) -> NSObject? {
+        if let property = entityDescription.propertiesByName[propertyName] {
+            return valueFromRepresentation(representation, forProperty: property)
         }
         else {
             return nil
         }
     }
 
+    public func valueFromRepresentation(representation: CDIRepresentation, forProperty property: NSPropertyDescription) -> NSObject? {
+        return representation[lookupKeyForProperty(property)]
+    }
+
     public func primaryKeyValueForManagedObject(object: NSManagedObject) -> NSObject? {
-        if let primaryKeyAttribute = primaryKeyAttributeForEntity(object.entity) {
+        if let primaryKeyAttribute = primaryKeyAttributeNameForEntity(object.entity) {
             return object.valueForKey(primaryKeyAttribute) as? NSObject
         }
         else {
@@ -159,7 +195,8 @@ public class CDIMapping {
         return property.name
     }
 
-    func primaryKeyAttributeForEntity(entity: NSEntityDescription) -> String? {
+    // Returns the attribute name that is used to uniquely identify the entity's managed objects
+    func primaryKeyAttributeNameForEntity(entity: NSEntityDescription) -> String? {
         return entity.userInfo?["relatedByAttribute"] as? String
     }
 }

@@ -192,6 +192,21 @@ public class CDIMapping {
         return externalRepresentation;
     }
 
+    public func represenationArrayFromExternalRepresentation(externalRepresentation: CDIExternalRepresentation) -> CDIRepresentationArray {
+
+        let representation = extractRootFromExternalRepresentation(externalRepresentation)
+        var representationArray: CDIRepresentationArray = []
+
+        if let array = representation as? CDIRepresentationArray {
+            representationArray = array
+        }
+        else if let representation = representation as? CDIRepresentation {
+            representationArray = [ representation ]
+        }
+
+        return representationArray
+    }
+
     /// Returns relationshipsByName from the entity description.
     public var relationshipsByName: [String : NSRelationshipDescription] {
         get {

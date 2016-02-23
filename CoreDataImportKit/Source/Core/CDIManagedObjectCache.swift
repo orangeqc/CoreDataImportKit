@@ -51,7 +51,8 @@ public class CDIManagedObjectCache {
         resetCacheForBaseEntity()
 
         // Build up the cache of primary keys for each representation
-        for representation in representationArray() {
+        let representations = mapping.represenationArrayFromExternalRepresentation(externalRepresentation)
+        for representation in representations {
             buildPrimaryKeysCacheWithRepresentation(representation)
         }
 
@@ -66,7 +67,8 @@ public class CDIManagedObjectCache {
         resetCacheForRelationships()
 
         // Add the primary key value for each relationship
-        for representation in representationArray() {
+        let representations = mapping.represenationArrayFromExternalRepresentation(externalRepresentation)
+        for representation in representations {
             buildPrimaryKeysCacheForRelationshipsWithRepresentation(representation)
         }
 
@@ -115,22 +117,6 @@ public class CDIManagedObjectCache {
 
             }
         }
-    }
-
-    /// Returns an array of representations, regardless if the representation represents one object or not
-    func representationArray() -> CDIRepresentationArray {
-        let rootRepresentation = mapping.extractRootFromExternalRepresentation(externalRepresentation)
-
-        var representationArray: CDIRepresentationArray = []
-
-        if let array = rootRepresentation as? CDIRepresentationArray {
-            representationArray = array
-        }
-        else if let representation = rootRepresentation as? CDIRepresentation {
-            representationArray = [ representation ]
-        }
-
-        return representationArray
     }
 
     /// Adds the representation's primary key to the cache

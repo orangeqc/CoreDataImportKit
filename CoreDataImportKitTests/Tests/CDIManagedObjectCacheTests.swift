@@ -34,8 +34,8 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
 
         cache.buildCacheForBaseEntity()
 
-        guard let   personPrimaryKeys   = cache.primaryKeysCache["Person"] as? Set<Int>,
-                    personPrimaryKey    = cache.primaryKeyCache["Person"],
+        guard let   personPrimaryKeys   = cache.primaryKeyValuesCache["Person"] as? Set<Int>,
+                    personPrimaryKey    = cache.primaryKeyAttributeNameCache["Person"],
                     cachedObject        = cache.objectCache["Person"]?[123] else {
                 XCTFail()
                 return
@@ -67,8 +67,8 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
 
         cache.buildCacheForRelatedEntities()
 
-        guard let   companyPrimaryKeys   = cache.primaryKeysCache["Company"] as? Set<Int>,
-            companyPrimaryKey    = cache.primaryKeyCache["Company"],
+        guard let   companyPrimaryKeys   = cache.primaryKeyValuesCache["Company"] as? Set<Int>,
+            companyPrimaryKey    = cache.primaryKeyAttributeNameCache["Company"],
             cachedCompanyObject  = cache.objectCache["Company"]?[5] else {
                 XCTFail()
                 return
@@ -112,7 +112,7 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
 
         cache.buildCacheForBaseEntity()
 
-        if let _ = cache.managedObjectForEntity(mapping.entityName, primaryKeyValue: 124) {
+        if cache.managedObjectForEntity(mapping.entityName, primaryKeyValue: 124) != nil {
             XCTFail()
         }
     }

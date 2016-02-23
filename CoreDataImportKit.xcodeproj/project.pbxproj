@@ -24,6 +24,7 @@
 		1CA27E021C767B83005E379B /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA27E001C767B83005E379B /* Company.swift */; };
 		1CA27E0F1C7788F5005E379B /* CDIImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA27E0E1C7788F5005E379B /* CDIImport.swift */; };
 		1CA27E111C778EC1005E379B /* CDIImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA27E101C778EC1005E379B /* CDIImportTests.swift */; };
+		1CA27E131C77EFA0005E379B /* NSManagedObject+Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA27E121C77EFA0005E379B /* NSManagedObject+Shortcuts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		1CA27E001C767B83005E379B /* Company.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Company.swift; path = Models/Company.swift; sourceTree = "<group>"; };
 		1CA27E0E1C7788F5005E379B /* CDIImport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIImport.swift; path = Source/Core/CDIImport.swift; sourceTree = "<group>"; };
 		1CA27E101C778EC1005E379B /* CDIImportTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIImportTests.swift; path = Tests/CDIImportTests.swift; sourceTree = "<group>"; };
+		1CA27E121C77EFA0005E379B /* NSManagedObject+Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSManagedObject+Shortcuts.swift"; path = "Utilities/NSManagedObject+Shortcuts.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +175,7 @@
 		1C56454F1C6E95F3007D0C24 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				1CA27E121C77EFA0005E379B /* NSManagedObject+Shortcuts.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				1CA27E011C767B83005E379B /* Company+CoreDataProperties.swift in Sources */,
 				1C56454C1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift in Sources */,
 				1C5645431C6C0803007D0C24 /* Person+CoreDataProperties.swift in Sources */,
+				1CA27E131C77EFA0005E379B /* NSManagedObject+Shortcuts.swift in Sources */,
 				1C56454D1C6D6B5E007D0C24 /* Printer.swift in Sources */,
 				1CA27E111C778EC1005E379B /* CDIImportTests.swift in Sources */,
 			);

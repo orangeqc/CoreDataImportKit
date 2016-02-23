@@ -13,13 +13,6 @@ public class CDIMapping {
     /// The `entityName` that this mapping represents
     public let entityName: String
 
-    /// Boolean value which specifies if the entity has a primary key defined.
-    public var hasPrimaryKey: Bool {
-        get {
-            return primaryKey != nil
-        }
-    }
-
     /// The local managed object context to use for all operations
     let context: NSManagedObjectContext
 
@@ -27,7 +20,7 @@ public class CDIMapping {
     let entityDescription: NSEntityDescription
 
     /// Attribute name which represents the primary key
-    let primaryKey: String?
+    let primaryKeyAttributeName: String?
 
     /**
      Initializes as mapping for a given entity inside a given context.
@@ -46,7 +39,7 @@ public class CDIMapping {
         entityDescription = description!
 
         // TODO: figure out why I can't use `primaryKeyAttributeForEntity(entityDescription)` here
-        primaryKey = entityDescription.userInfo?["relatedByAttribute"] as? String
+        primaryKeyAttributeName = entityDescription.userInfo?["relatedByAttribute"] as? String
     }
 
     /**
@@ -63,17 +56,28 @@ public class CDIMapping {
 
         let object = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: context)
 
-        if primaryKey != nil {
+        if primaryKeyAttributeName != nil {
             if let representationValue = primaryKeyValueFromRepresentation(representation) {
-                object.setValue(representationValue, forKey: primaryKey!)
+                object.setValue(representationValue, forKey: primaryKeyAttributeName!)
             }
         }
 
         return object
     }
 
+    /**
+     Creates a new managed object for the entity that the relationship points to.
+
+     - parameter representation:   Representation where the related information should be pulled from.
+     - parameter relationshipName: Name of the relationship to look up on the mapping's entity
+
+     - returns: Returns the new managed object if created, otherwise returns nil
+     */
     public func createManagedObjectWithRepresentation(representation: CDIRepresentation, forRelationship relationshipName: String) -> NSManagedObject? {
+
         let relationshipDescription = entityDescription.relationshipsByName[relationshipName]
+
+        assert(relationshipDescription != nil, "Relationship \(relationshipName) does not exist")
 
         if let entityName = relationshipDescription?.destinationEntity?.name {
 
@@ -109,26 +113,37 @@ public class CDIMapping {
         }
     }
 
+    /**
+     Returns the value, from the representation, of the primary key.
+
+     - parameter representation: Representation to get the value from
+
+     - returns: NSObject of the primary key
+     */
     public func primaryKeyValueFromRepresentation(representation: CDIRepresentation) -> NSObject? {
-        return valueFromRepresentation(representation, forPropertyNamed: primaryKey!)
-//        if let attribute = entityDescription.attributesByName[primaryKey!] {
-//            return representation[lookupKeyForProperty(attribute)]
-//        }
-//        else {
-//            return nil
-//        }
+        return valueFromRepresentation(representation, forPropertyNamed: primaryKeyAttributeName!)
     }
 
+    /**
+     Returns the value, from the representation, of the primary key for a relationship.
+
+     - parameter representation:   The representation for the mapping's entity.
+     - parameter relationshipName: Name of the relationship.
+
+     - returns: NSObject of the primary key
+     */
     public func primaryKeyValueFromRepresentation(representation: CDIRepresentation, forRelationship relationshipName: String) -> NSObject? {
-//        if let relationship = entityDescription.relationshipsByName[relationshipName] {
-//            return representation[lookupKeyForProperty(relationship)]
-//        }
-//        else {
-//            return nil
-//        }
         return valueFromRepresentation(representation, forPropertyNamed: relationshipName)
     }
 
+    /**
+     Returns the value, from the representation, for a given property
+
+     - parameter representation: The representation for the mapping's entity.
+     - parameter propertyName:   Name of the property to look up in the representation
+
+     - returns: NSObject of the value
+     */
     public func valueFromRepresentation(representation: CDIRepresentation, forPropertyNamed propertyName: String) -> NSObject? {
         if let property = entityDescription.propertiesByName[propertyName] {
             return valueFromRepresentation(representation, forProperty: property)
@@ -138,9 +153,18 @@ public class CDIMapping {
         }
     }
 
+    /**
+     Returns the value, from the representation, for a given property
+
+     - parameter representation: The representation for the mapping's entity.
+     - parameter property:       NSPropertyDescription of the property to look up the value of
+
+     - returns: NSObject of the value
+     */
     public func valueFromRepresentation(representation: CDIRepresentation, forProperty property: NSPropertyDescription) -> NSObject? {
         return representation[lookupKeyForProperty(property)]
     }
+
 
     public func primaryKeyValueForManagedObject(object: NSManagedObject) -> NSObject? {
         if let primaryKeyAttribute = primaryKeyAttributeNameForEntity(object.entity) {
@@ -168,6 +192,7 @@ public class CDIMapping {
         return externalRepresentation;
     }
 
+    /// Returns relationshipsByName from the entity description.
     public var relationshipsByName: [String : NSRelationshipDescription] {
         get {
             return entityDescription.relationshipsByName
@@ -183,8 +208,12 @@ public class CDIMapping {
     - parameter attribute: NSAttributeDescription of the attribute
 
     - returns: String to look up the attribute in the representation
+    
+    - Note: This isn't an extension on NSPropertyDescription because, at least right now, we don't
+    want to leak API to other classes.
+    
+    - TODO: Instead of a single string, return array of possible look up keys
     */
-    // TODO: Instead of a single string, return array of possible look up keys
     func lookupKeyForProperty(property: NSPropertyDescription) -> String {
         if let userInfo = property.userInfo {
             if let mappedKeyName = userInfo["mappedKeyName"] as? String {
@@ -195,7 +224,16 @@ public class CDIMapping {
         return property.name
     }
 
-    // Returns the attribute name that is used to uniquely identify the entity's managed objects
+    /**
+     Returns the attribute name used to uniquely identify a managed object
+
+     - parameter entity: Entity to look up
+
+     - returns: Name of the primary key attribute
+     
+     - Note: This isn't an extension on NSEntityDescription because, at least right now, we don't
+       want to leak API to other classes.
+     */
     func primaryKeyAttributeNameForEntity(entity: NSEntityDescription) -> String? {
         return entity.userInfo?["relatedByAttribute"] as? String
     }

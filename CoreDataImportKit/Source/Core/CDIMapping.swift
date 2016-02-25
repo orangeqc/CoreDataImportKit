@@ -106,9 +106,24 @@ public class CDIMapping {
      */
     public func updateManagedObjectAttributes(managedObject: NSManagedObject, withRepresentation representation: CDIRepresentation) {
         for (attributeName, attributeDescription) in entityDescription.attributesByName {
-            if let representationValue = representation[lookupKeyForProperty(attributeDescription)] {
-                // TODO: Only set value if they are actually different
-                managedObject.setValue(representationValue, forKey: attributeName)
+            if var representationValue: NSObject = valueInRepresentation(representation, forAttribute: attributeDescription) {
+
+                let attributeType = attributeDescription.attributeType
+                switch attributeType {
+                case .DateAttributeType:
+                    representationValue = dateFromRepresentationValue(representationValue, forAttribute:attributeDescription)!
+                case .FloatAttributeType:
+                    break
+                default:
+                    break
+                }
+
+                if let oldValue = managedObject.valueForKey(attributeName) where oldValue as! NSObject == representationValue {
+                    continue
+                }
+                else {
+                    managedObject.setValue(representationValue, forKey: attributeName)
+                }
             }
         }
     }
@@ -184,9 +199,6 @@ public class CDIMapping {
 
      - returns: Array of dictionaries which represent objects.
      
-     Todo: Probably needs to take an AnyObject so that subclasses can modify the AnyObject into
-     the required array. Example: if you wanted to do a mapping subclass which handled 
-     JSONAPI this is where you'd overwrite how to extract the proper array.
      */
     public func extractRootFromExternalRepresentation(externalRepresentation: CDIExternalRepresentation) -> CDIRootRepresentation {
         return externalRepresentation;
@@ -218,7 +230,8 @@ public class CDIMapping {
 
 
     /**
-    Function used to look up which key should be used to look up the value in a representation.
+    Function used to look up which key should be used to look up the value in a representation. Will 
+    use `mappedKeyName` if provided, otherwise uses's the attribute's name.
 
     - parameter attribute: NSAttributeDescription of the attribute
 
@@ -251,5 +264,50 @@ public class CDIMapping {
      */
     func primaryKeyAttributeNameForEntity(entity: NSEntityDescription) -> String? {
         return entity.userInfo?["relatedByAttribute"] as? String
+    }
+
+    /**
+     Returns date for a given representation and attribute. Looks up `dateFormat` in the `userInfo` or 
+     uses `yyyy-MM-dd'T'HH:mm:ssz` as a default formatter.
+
+     - parameter representationValue: Representation to extract the date string value from
+     - parameter attribute:           The attribute description to look for a `dateFormat` on
+
+     - returns: Returns a date optional
+     */
+    func dateFromRepresentationValue(representationValue: NSObject, forAttribute attribute:NSAttributeDescription) -> NSDate? {
+        let dateFormater = NSDateFormatter()
+        dateFormater.locale = NSLocale.currentLocale()
+        dateFormater.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+        dateFormater.dateFormat = (attribute.userInfo?["dateFormat"] as? String) ?? "yyyy-MM-dd'T'HH:mm:ssz"
+
+        if let dateString = representationValue as? String {
+            return dateFormater.dateFromString(dateString)
+        }
+        else {
+            return nil
+        }
+    }
+
+    /**
+     Handles key paths for representations. Will return the value found in the representation for the attribute's lookup key.
+
+     - parameter representation: Representation to find value in
+     - parameter attribute:      Attribute description to look for mappedKeyName
+
+     - returns: Value found at the key path
+     */
+    func valueInRepresentation(var representation: CDIRepresentation, forAttribute attribute:NSAttributeDescription) -> NSObject? {
+        var keys = lookupKeyForProperty(attribute).componentsSeparatedByString(".")
+
+        // Dig into each nested dictionary until there is no more
+        while !keys.isEmpty, let newRep = representation[keys.first!] as? CDIRepresentation {
+            keys.removeFirst()
+            representation = newRep
+        }
+
+        // Check to make sure it wasn't supposed to find something deeper
+        let first = keys.removeFirst()
+        return keys.isEmpty ? representation[first] : nil
     }
 }

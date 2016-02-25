@@ -9,6 +9,28 @@
             <entry key="relatedByAttribute" value="id"/>
         </userInfo>
     </entity>
+    <entity name="EveryAttributeType" representedClassName=".EveryAttributeType" syncable="YES">
+        <attribute name="booleanAttribute" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="dateAttribute" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateAttributeCustomized" optional="YES" attributeType="Date" syncable="YES">
+            <userInfo>
+                <entry key="dateFormat" value="MM/DD/YY"/>
+            </userInfo>
+        </attribute>
+        <attribute name="decimalAttribute" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="doubleAttribute" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="floatAttribute" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="integerAttribute" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="keyPathAttribute" optional="YES" attributeType="String" syncable="YES">
+            <userInfo>
+                <entry key="mappedKeyName" value="keyPath.attributeName"/>
+            </userInfo>
+        </attribute>
+        <attribute name="stringAttribute" optional="YES" attributeType="String" syncable="YES"/>
+        <userInfo>
+            <entry key="relatedByAttribute" value="integerAttribute"/>
+        </userInfo>
+    </entity>
     <entity name="Person" representedClassName=".Person" syncable="YES">
         <attribute name="age" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -30,8 +52,9 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
+        <element name="Company" positionX="-54" positionY="9" width="128" height="105"/>
         <element name="Person" positionX="-63" positionY="-18" width="128" height="105"/>
         <element name="Printer" positionX="-54" positionY="18" width="128" height="60"/>
-        <element name="Company" positionX="-54" positionY="9" width="128" height="105"/>
+        <element name="EveryAttributeType" positionX="-63" positionY="36" width="128" height="180"/>
     </elements>
 </model>

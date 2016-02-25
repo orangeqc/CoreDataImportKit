@@ -103,6 +103,48 @@ class CDIMappingTests: CoreDataImportKitTests {
         }
     }
 
+    func testUpdateManagedObjectAttributesWithRepresentationForAllAttributeTypes() {
+        let representation = [
+            "booleanAttribute": true,
+            "dateAttribute": "2016-02-25T11:01:51-08:00",
+            "dateAttributeCustomized": "02/25/2016",
+            "decimalAttribute": 11.2,
+            "doubleAttribute": 12.3,
+            "floatAttribute": 13.4,
+            "integerAttribute": 14,
+            "keyPath": [ "attributeName": "keyPathValue" ],
+            "stringAttribute": "Hello world"
+        ]
+
+        let mapping = CDIMapping(entityName: "EveryAttributeType", inManagedObjectContext: managedObjectContext)
+        let managedObject = mapping.createManagedObjectWithRepresentation(representation)
+        mapping.updateManagedObjectAttributes(managedObject, withRepresentation:representation)
+
+        XCTAssertEqual(managedObject.entity.name!, "EveryAttributeType")
+
+        let dateFormat1 = NSDateFormatter()
+        dateFormat1.dateFormat = "yyyy-MM-dd'T'HH:mm:ssz"
+        let dateFormat2 = NSDateFormatter()
+        dateFormat2.locale = NSLocale.currentLocale()
+        dateFormat2.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+        dateFormat2.dateFormat = "MM/DD/YY"
+
+        if let eat = managedObject as? EveryAttributeType {
+            XCTAssertEqual(eat.booleanAttribute!, true)
+            XCTAssertEqual(eat.dateAttribute!, dateFormat1.dateFromString("2016-02-25T11:01:51-08:00"))
+            XCTAssertEqual(eat.dateAttributeCustomized!, dateFormat2.dateFromString("02/25/2016"))
+            XCTAssertEqual(eat.decimalAttribute!, 11.2)
+            XCTAssertEqual(eat.doubleAttribute!, 12.3)
+            XCTAssertEqualWithAccuracy(eat.floatAttribute!.floatValue, Float(13.4), accuracy: 0.01)
+            XCTAssertEqual(eat.integerAttribute!, 14)
+            XCTAssertEqual(eat.stringAttribute, "Hello world")
+            XCTAssertEqual(eat.keyPathAttribute, "keyPathValue")
+        }
+        else {
+            XCTFail("Unable to create entity")
+        }
+    }
+
     // MARK: primaryKeyValueFromRepresentation(_:)
 
     func testPrimaryKeyValueFromRepresentation() {

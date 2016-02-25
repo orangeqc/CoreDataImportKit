@@ -25,6 +25,7 @@
 		1CA27E0F1C7788F5005E379B /* CDIImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA27E0E1C7788F5005E379B /* CDIImport.swift */; };
 		1CA27E111C778EC1005E379B /* CDIImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA27E101C778EC1005E379B /* CDIImportTests.swift */; };
 		1CA27E131C77EFA0005E379B /* NSManagedObject+Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA27E121C77EFA0005E379B /* NSManagedObject+Shortcuts.swift */; };
+		1CE975E01C7D36E400C03404 /* CDIManagedObjectProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE975DF1C7D36E400C03404 /* CDIManagedObjectProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		1CA27E0E1C7788F5005E379B /* CDIImport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIImport.swift; path = Source/Core/CDIImport.swift; sourceTree = "<group>"; };
 		1CA27E101C778EC1005E379B /* CDIImportTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIImportTests.swift; path = Tests/CDIImportTests.swift; sourceTree = "<group>"; };
 		1CA27E121C77EFA0005E379B /* NSManagedObject+Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSManagedObject+Shortcuts.swift"; path = "Utilities/NSManagedObject+Shortcuts.swift"; sourceTree = "<group>"; };
+		1CE975DF1C7D36E400C03404 /* CDIManagedObjectProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIManagedObjectProtocol.swift; path = Utility/CDIManagedObjectProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				1C1B242C1C752AEB00F1EE2E /* CDIRepresentation.swift */,
+				1CE975DF1C7D36E400C03404 /* CDIManagedObjectProtocol.swift */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1C1B242D1C752AEB00F1EE2E /* CDIRepresentation.swift in Sources */,
+				1CE975E01C7D36E400C03404 /* CDIManagedObjectProtocol.swift in Sources */,
 				1CA27E0F1C7788F5005E379B /* CDIImport.swift in Sources */,
 				1C1B24261C73F95C00F1EE2E /* CDIManagedObjectCache.swift in Sources */,
 				1C5645491C6D414A007D0C24 /* CDIMapping.swift in Sources */,

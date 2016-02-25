@@ -66,25 +66,33 @@ public class CDIImport {
      - parameter representation: Representation to import.
      */
     public func importAttributesForRepresentation(representation: CDIRepresentation) {
-        var managedObject: NSManagedObject?
+        var managedObjectOptional: NSManagedObject?
 
         // Ask the cache for the managed object
         if let primaryKeyValue = mapping.primaryKeyValueFromRepresentation(representation) {
-            managedObject = cache.managedObjectForEntity(mapping.entityName, primaryKeyValue: primaryKeyValue)
+            managedObjectOptional = cache.managedObjectForEntity(mapping.entityName, primaryKeyValue: primaryKeyValue)
         }
 
         // If it doesn't exist, create one and add to the cache
         // TODO: Add option to skip the creation
-        if managedObject == nil {
-            managedObject = mapping.createManagedObjectWithRepresentation(representation)
-            if let mo = managedObject {
-                cache.addManagedObjectToCache(mo)
+        if managedObjectOptional == nil {
+            managedObjectOptional = mapping.createManagedObjectWithRepresentation(representation)
+            if let managedObject = managedObjectOptional {
+                cache.addManagedObjectToCache(managedObject)
             }
         }
 
         // Update the attributes
-        if let mo = managedObject {
-            mapping.updateManagedObjectAttributes(mo, withRepresentation: representation)
+        if let managedObject = managedObjectOptional {
+
+            let shouldImport = (managedObject as CDIManagedObjectProtocol).shouldImport?(representation) ?? true
+
+            if shouldImport {
+
+                (managedObject as CDIManagedObjectProtocol).willImport?(representation)
+
+                mapping.updateManagedObjectAttributes(managedObject, withRepresentation: representation)
+            }
         }
     }
 
@@ -114,26 +122,32 @@ public class CDIImport {
                 continue
             }
 
-            var relatedManagedObject: NSManagedObject?
+            var relatedManagedObjectOptional: NSManagedObject?
 
             // Ask the cache for the managed object
             if let primaryKeyValue = mapping.primaryKeyValueFromRepresentation(representation, forRelationship: relationship) {
-                relatedManagedObject = cache.managedObjectForEntity(relatedEntityName, primaryKeyValue: primaryKeyValue)
+                relatedManagedObjectOptional = cache.managedObjectForEntity(relatedEntityName, primaryKeyValue: primaryKeyValue)
             }
 
             // If it doesn't exist, create one and add to the cache
             // TODO: Add option to skip creation of relationships
-            if relatedManagedObject == nil {
-                relatedManagedObject = mapping.createManagedObjectWithRepresentation(representation, forRelationship: relationship)
-                if let mo = relatedManagedObject {
-                    cache.addManagedObjectToCache(mo)
+            if relatedManagedObjectOptional == nil {
+                relatedManagedObjectOptional = mapping.createManagedObjectWithRepresentation(representation, forRelationship: relationship)
+                if let relatedManagedObject = relatedManagedObjectOptional {
+                    cache.addManagedObjectToCache(relatedManagedObject)
                 }
             }
 
-            // Update relationship
-            if let mo = relatedManagedObject {
-                managedObject.setValue(mo, forKey: relationship)
+            let shouldBuild = (managedObject as CDIManagedObjectProtocol).shouldBuildRelationship?(relationship, withRepresentation: representation) ?? true
+
+            if shouldBuild {
+                // Update relationship
+                if let relatedManagedObject = relatedManagedObjectOptional {
+                    managedObject.setValue(relatedManagedObject, forKey: relationship)
+                }
             }
         }
+
+        (managedObject as CDIManagedObjectProtocol).didImport?(representation)
     }
 }

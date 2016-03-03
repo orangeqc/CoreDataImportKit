@@ -31,7 +31,6 @@
 		1CEB0E4B1C84E8C700C5D09E /* Company.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E451C84E8C700C5D09E /* Company.json */; };
 		1CEB0E4C1C84E8C700C5D09E /* PeopleWithRoot.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E461C84E8C700C5D09E /* PeopleWithRoot.json */; };
 		1CEB0E4D1C84E8C700C5D09E /* Person.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E471C84E8C700C5D09E /* Person.json */; };
-		1CEB0E4E1C84E8C700C5D09E /* PersonWithNestedRelationship.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E481C84E8C700C5D09E /* PersonWithNestedRelationship.json */; };
 		1CEB0E4F1C84E8C700C5D09E /* PersonWithRoot.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E491C84E8C700C5D09E /* PersonWithRoot.json */; };
 		1CEB0E501C84E8C700C5D09E /* RawAttributes.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E4A1C84E8C700C5D09E /* RawAttributes.json */; };
 		1CEB0E531C850E1500C5D09E /* Computer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEB0E511C850E1500C5D09E /* Computer+CoreDataProperties.swift */; };
@@ -78,7 +77,6 @@
 		1CEB0E451C84E8C700C5D09E /* Company.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Company.json; path = Fixtures/Company.json; sourceTree = "<group>"; };
 		1CEB0E461C84E8C700C5D09E /* PeopleWithRoot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = PeopleWithRoot.json; path = Fixtures/PeopleWithRoot.json; sourceTree = "<group>"; };
 		1CEB0E471C84E8C700C5D09E /* Person.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Person.json; path = Fixtures/Person.json; sourceTree = "<group>"; };
-		1CEB0E481C84E8C700C5D09E /* PersonWithNestedRelationship.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = PersonWithNestedRelationship.json; path = Fixtures/PersonWithNestedRelationship.json; sourceTree = "<group>"; };
 		1CEB0E491C84E8C700C5D09E /* PersonWithRoot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = PersonWithRoot.json; path = Fixtures/PersonWithRoot.json; sourceTree = "<group>"; };
 		1CEB0E4A1C84E8C700C5D09E /* RawAttributes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = RawAttributes.json; path = Fixtures/RawAttributes.json; sourceTree = "<group>"; };
 		1CEB0E511C850E1500C5D09E /* Computer+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Computer+CoreDataProperties.swift"; path = "Models/Computer+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -218,7 +216,6 @@
 				1CEB0E451C84E8C700C5D09E /* Company.json */,
 				1CEB0E461C84E8C700C5D09E /* PeopleWithRoot.json */,
 				1CEB0E471C84E8C700C5D09E /* Person.json */,
-				1CEB0E481C84E8C700C5D09E /* PersonWithNestedRelationship.json */,
 				1CEB0E491C84E8C700C5D09E /* PersonWithRoot.json */,
 				1CEB0E4A1C84E8C700C5D09E /* RawAttributes.json */,
 				1CEB0E431C84DB4200C5D09E /* People.json */,
@@ -329,7 +326,6 @@
 				1CEB0E441C84DB4200C5D09E /* People.json in Resources */,
 				1CEB0E4B1C84E8C700C5D09E /* Company.json in Resources */,
 				1CEB0E4D1C84E8C700C5D09E /* Person.json in Resources */,
-				1CEB0E4E1C84E8C700C5D09E /* PersonWithNestedRelationship.json in Resources */,
 				1CEB0E4C1C84E8C700C5D09E /* PeopleWithRoot.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

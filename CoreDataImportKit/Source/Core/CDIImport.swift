@@ -166,7 +166,7 @@ public class CDIImport {
             else {
 
                 // Ask cache for existing object
-                var relatedManagedObject = cache.managedObjectForPrimaryKey(representationValue, usingMapping: destinationEntityMapping)
+                var relatedManagedObject = cache.managedObjectWithPrimaryKey(representationValue, usingMapping: destinationEntityMapping)
 
                 // If it does not exist, create it, and set the primary key
                 if relatedManagedObject == nil {

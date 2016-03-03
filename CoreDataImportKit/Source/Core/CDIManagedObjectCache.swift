@@ -70,7 +70,7 @@ public class CDIManagedObjectCache {
 
      - returns: Managed object, if one exists
      */
-    public func managedObjectForPrimaryKey(primaryKeyValue: NSObject, usingMapping mapping: CDIMapping) ->  NSManagedObject? {
+    public func managedObjectWithPrimaryKey(primaryKeyValue: NSObject, usingMapping mapping: CDIMapping) ->  NSManagedObject? {
         let cache = objectCacheForMapping(mapping)
         return cache[primaryKeyValue]
     }

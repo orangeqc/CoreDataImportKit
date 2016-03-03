@@ -28,6 +28,21 @@ class CDIMappingTests: CoreDataImportKitTests {
         XCTAssertEqual(mapping.entityName, "Person")
     }
 
+    // MARK: mappingForRelationship(_:)
+
+    func testMappingForRelationship() {
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        if let computer = mapping.entityDescription.relationshipsByName["computer"],
+            computerMapping = mapping.mappingForRelationship(computer){
+
+            XCTAssertEqual(computerMapping.entityName, "Computer")
+            XCTAssertEqual(computerMapping.context, managedObjectContext)
+        }
+        else {
+            XCTFail()
+        }
+    }
+
     // MARK: createManagedObjectWithRepresentation(_:)
 
     func testCreateManagedObjectWithRepresentation() {
@@ -63,24 +78,22 @@ class CDIMappingTests: CoreDataImportKitTests {
         }
     }
 
-    // MARK: createManagedObjectWithRepresentation(_:forRelationship:)
+    // MARK: createManagedObjectWithPrimaryKey(_:)
 
-//    func testCreateManagedObjectWithRepresentationForRelationship() {
-//        let representation = [ "id": 123, "fullName": "John Doe", "companyId": 5 ]
-//
-//        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
-//        let object = mapping.createManagedObjectWithRepresentation(representation, forRelationship: "job")
-//
-//        XCTAssertEqual(object!.entity.name!, "Company")
-//
-//        if let company = object as? Company {
-//            XCTAssertEqual(company.id, 5)
-//            XCTAssertNil(company.name)
-//        }
-//        else {
-//            XCTFail("Unable to create company")
-//        }
-//    }
+    func testCreateManagedObjectWithPrimaryKey() {
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        let managedObject = mapping.createManagedObjectWithPrimaryKey(123)
+
+        XCTAssertEqual(managedObject.entity.name!, "Person")
+
+        if let person = managedObject as? Person {
+            XCTAssertEqual(person.id, 123)
+            XCTAssertNil(person.name)
+        }
+        else {
+            XCTFail("Unable to create person")
+        }
+    }
 
     // MARK: updateManagedObjectAttributes(_:withRepresentation:)
 
@@ -188,8 +201,6 @@ class CDIMappingTests: CoreDataImportKitTests {
         XCTAssertEqual((value as? CDIRepresentation)!, computer)
     }
 
-
-
     // MARK: primaryKeyValueForManagedObject(_:)
 
     func testPrimaryKeyValueForManagedObject() {
@@ -206,7 +217,7 @@ class CDIMappingTests: CoreDataImportKitTests {
     // MARK: extractRootFromExternalRepresentation(_:)
 
     func testExtractRootFromExternalRepresentation() {
-        let externalRepresentation : [ [String : NSObject] ] = [
+        let externalRepresentation : CDIRepresentationArray = [
             [ "id": 123, "fullName": "John Doe", "age": 35 ],
             [ "id": 124, "fullName": "Jane Doe", "age": 32 ],
             [ "id": 125, "fullName": "Timmy Doe", "age": 15 ]
@@ -215,6 +226,28 @@ class CDIMappingTests: CoreDataImportKitTests {
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let representation = mapping.extractRootFromExternalRepresentation(externalRepresentation)
         XCTAssertEqual(representation as! [NSDictionary], externalRepresentation);
+    }
+
+    // MARK: represenationArrayFromExternalRepresentation(_:)
+
+    func testRepresenationArrayFromExternalRepresentationWithRepresentationArray() {
+        let externalRepresentation : CDIRepresentationArray = [
+            [ "id": 123, "fullName": "John Doe", "age": 35 ],
+            [ "id": 124, "fullName": "Jane Doe", "age": 32 ],
+            [ "id": 125, "fullName": "Timmy Doe", "age": 15 ]
+        ]
+
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+
+        XCTAssertEqual(mapping.represenationArrayFromExternalRepresentation(externalRepresentation), externalRepresentation)
+    }
+
+    func testRepresenationArrayFromExternalRepresentationWithSingleRepresentation() {
+        let externalRepresentation : CDIRepresentation = [ "id": 123, "fullName": "John Doe", "age": 35 ]
+
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+
+        XCTAssertEqual(mapping.represenationArrayFromExternalRepresentation(externalRepresentation), [externalRepresentation])
     }
 
     // MARK: relationshipsByName

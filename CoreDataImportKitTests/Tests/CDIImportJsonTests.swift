@@ -53,6 +53,11 @@ class CDIImportJsonTests: CoreDataImportKitTests {
         XCTAssertEqual(peopleCount, count)
     }
 
+    func checkForComputerCount(count: Int) {
+        let computerCount = Computer.countInContext(managedObjectContext)
+        XCTAssertEqual(computerCount, count)
+    }
+
     func testPeople() {
         let people = representationFromJSONFile("People")!
 
@@ -116,6 +121,7 @@ class CDIImportJsonTests: CoreDataImportKitTests {
 
         checkForJohnSmith()
         checkForPeopleCount(2)
+        checkForComputerCount(2)
 
         if let person: Person = Person.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext), let computer = person.computer {
             XCTAssertEqual(computer.name, "John Smith's MacBook")

@@ -156,20 +156,10 @@ class CDIMappingTests: CoreDataImportKitTests {
         XCTAssertEqual(primaryKey as? Int, 123)
     }
 
-    // MARK: primaryKeyValueFromRepresentation(_:forRelationship:)
-
-    func testPrimaryKeyValueFromRepresentationForRelationship() {
-        let representation = [ "id": 123, "fullName": "John Doe", "companyId": 5 ]
-
-        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
-        let primaryKey = mapping.primaryKeyValueFromRepresentation(representation, forRelationship: "job")
-
-        XCTAssertEqual(primaryKey as? Int, 5)
-    }
-
     // MARK: valueFromRepresentation(_:forPropertyNamed:)
 
     // This also tests valueFromRepresentation(_:forProperty:)
+
     func testValueFromRepresentationForPropertyNamed() {
         let representation = [ "id": 123, "fullName": "John Doe", "companyId": 5 ]
 
@@ -178,6 +168,27 @@ class CDIMappingTests: CoreDataImportKitTests {
 
         XCTAssertEqual(value as? String, "John Doe")
     }
+
+    func testValueFromRepresentationForPropertyNamedForRelationship() {
+        let representation = [ "id": 123, "fullName": "John Doe", "companyId": 5 ]
+
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        let value = mapping.valueFromRepresentation(representation, forPropertyNamed: "job")
+
+        XCTAssertEqual(value as? Int, 5)
+    }
+
+    func testValueFromRepresentationForPropertyNamedWithNestedValue() {
+        let computer = [ "name": "John Smith's MacBook", "purchased": "2016-02-25T11:01:51-08:00", "cost": 1100.99 ]
+        let representation: CDIRepresentation = [ "id": 123, "fullName": "John Doe", "computer": computer ]
+
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        let value = mapping.valueFromRepresentation(representation, forPropertyNamed: "computer")
+
+        XCTAssertEqual((value as? CDIRepresentation)!, computer)
+    }
+
+
 
     // MARK: primaryKeyValueForManagedObject(_:)
 
@@ -228,12 +239,4 @@ class CDIMappingTests: CoreDataImportKitTests {
         XCTAssertEqual(mapping.lookupKeyForProperty(ageProperty!), "age")
     }
 
-    // MARK: primaryKeyAttributeNameForEntity(_:)
-
-    func testPrimaryKeyAttributeNameForEntity() {
-        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
-        let personEntity = NSEntityDescription.entityForName("Person", inManagedObjectContext: managedObjectContext)
-        let primaryKeyName = mapping.primaryKeyAttributeNameForEntity(personEntity!)
-        XCTAssertEqual(primaryKeyName, "id")
-    }
 }

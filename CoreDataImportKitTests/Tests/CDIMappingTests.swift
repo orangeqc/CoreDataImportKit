@@ -65,22 +65,22 @@ class CDIMappingTests: CoreDataImportKitTests {
 
     // MARK: createManagedObjectWithRepresentation(_:forRelationship:)
 
-    func testCreateManagedObjectWithRepresentationForRelationship() {
-        let representation = [ "id": 123, "fullName": "John Doe", "companyId": 5 ]
-
-        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
-        let object = mapping.createManagedObjectWithRepresentation(representation, forRelationship: "job")
-
-        XCTAssertEqual(object!.entity.name!, "Company")
-
-        if let company = object as? Company {
-            XCTAssertEqual(company.id, 5)
-            XCTAssertNil(company.name)
-        }
-        else {
-            XCTFail("Unable to create company")
-        }
-    }
+//    func testCreateManagedObjectWithRepresentationForRelationship() {
+//        let representation = [ "id": 123, "fullName": "John Doe", "companyId": 5 ]
+//
+//        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+//        let object = mapping.createManagedObjectWithRepresentation(representation, forRelationship: "job")
+//
+//        XCTAssertEqual(object!.entity.name!, "Company")
+//
+//        if let company = object as? Company {
+//            XCTAssertEqual(company.id, 5)
+//            XCTAssertNil(company.name)
+//        }
+//        else {
+//            XCTFail("Unable to create company")
+//        }
+//    }
 
     // MARK: updateManagedObjectAttributes(_:withRepresentation:)
 

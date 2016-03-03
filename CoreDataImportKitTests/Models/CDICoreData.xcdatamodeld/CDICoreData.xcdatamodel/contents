@@ -4,9 +4,20 @@
         <attribute name="founded" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="computers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Computer" inverseName="company" inverseEntity="Computer" syncable="YES"/>
         <relationship name="employees" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Person" inverseName="job" inverseEntity="Person" syncable="YES"/>
         <userInfo>
             <entry key="relatedByAttribute" value="id"/>
+        </userInfo>
+    </entity>
+    <entity name="Computer" representedClassName=".Computer" syncable="YES">
+        <attribute name="cost" optional="YES" attributeType="Double" defaultValueString="0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="purchased" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="company" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Company" inverseName="computers" inverseEntity="Company" syncable="YES"/>
+        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Person" inverseName="computer" inverseEntity="Person" syncable="YES"/>
+        <userInfo>
+            <entry key="relatedByAttribute" value="name"/>
         </userInfo>
     </entity>
     <entity name="EveryAttributeType" representedClassName=".EveryAttributeType" syncable="YES">
@@ -39,6 +50,7 @@
                 <entry key="mappedKeyName" value="fullName"/>
             </userInfo>
         </attribute>
+        <relationship name="computer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Computer" inverseName="owner" inverseEntity="Computer" syncable="YES"/>
         <relationship name="job" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Company" inverseName="employees" inverseEntity="Company" syncable="YES">
             <userInfo>
                 <entry key="mappedKeyName" value="companyId"/>
@@ -52,9 +64,10 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Company" positionX="-54" positionY="9" width="128" height="105"/>
-        <element name="Person" positionX="-63" positionY="-18" width="128" height="105"/>
-        <element name="Printer" positionX="-54" positionY="18" width="128" height="60"/>
+        <element name="Company" positionX="-54" positionY="9" width="128" height="120"/>
         <element name="EveryAttributeType" positionX="-63" positionY="36" width="128" height="180"/>
+        <element name="Person" positionX="-63" positionY="-18" width="128" height="120"/>
+        <element name="Printer" positionX="-54" positionY="18" width="128" height="60"/>
+        <element name="Computer" positionX="-63" positionY="81" width="128" height="120"/>
     </elements>
 </model>

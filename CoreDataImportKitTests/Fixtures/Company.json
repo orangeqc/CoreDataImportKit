@@ -1,0 +1,27 @@
+{
+    "id": 5,
+    "name": "Blue Inc.",
+    "founded": "2016",
+    "employees": [
+      {
+        "id" : 1,
+        "fullName" : "John Smith",
+        "age": 30,
+        "computer": {
+          "name": "John Smith's MacBook",
+          "purchased": "2016-02-25T11:01:51-08:00",
+          "cost": 1100.99
+        }
+      },
+      {
+        "id" : 2,
+        "fullName" : "Jane Smith",
+        "age": 32,
+        "computer": {
+          "name": "Jane Smith's MacBook",
+          "purchased": "2016-02-25T11:01:51-08:00",
+          "cost": 1100.99
+        }
+      }
+    ]
+}

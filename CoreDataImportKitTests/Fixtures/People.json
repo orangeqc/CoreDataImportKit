@@ -1,0 +1,32 @@
+[
+  {
+    "id" : 1,
+    "fullName" : "John Smith",
+    "age": 30,
+    "companyId": 5
+  },
+  {
+    "id" : 2,
+    "fullName" : "Joe Smith",
+    "age": 31,
+    "companyId": 4
+  },
+  {
+    "id" : 3,
+    "fullName" : "Jake Smith",
+    "age": 32,
+    "companyId": 5
+  },
+  {
+    "id" : 4,
+    "fullName" : "Jane Smith",
+    "age": 33,
+    "companyId": 5
+  },
+  {
+    "id" : 5,
+    "fullName" : "Joana Smith",
+    "age": 34,
+    "companyId": 4
+  }
+]

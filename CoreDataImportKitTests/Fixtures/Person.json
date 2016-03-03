@@ -1,0 +1,11 @@
+{
+  "id" : 1,
+  "fullName" : "John Smith",
+  "age": 30,
+  "companyId": 5,
+  "computer": {
+    "name": "John Smith's MacBook",
+    "purchased": "2016-02-25T11:01:51-08:00",
+    "cost": 1100.99
+  }
+}

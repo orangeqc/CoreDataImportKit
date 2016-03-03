@@ -5,6 +5,7 @@
 //  Created by Ryan Mathews on 2/11/16.
 //  Copyright © 2016 OrangeQC. All rights reserved.
 //
+//  TODO: Have it handle a root node for the external representation.
 
 import Foundation
 import CoreData
@@ -30,7 +31,7 @@ public class CDIMapping {
 
      - returns: Returns a mapping
      */
-    init(entityName: String, inManagedObjectContext context: NSManagedObjectContext) {
+    public init(entityName: String, inManagedObjectContext context: NSManagedObjectContext) {
         self.entityName = entityName
         self.context = context
 
@@ -40,6 +41,14 @@ public class CDIMapping {
 
         // TODO: figure out why I can't use `primaryKeyAttributeForEntity(entityDescription)` here
         primaryKeyAttributeName = entityDescription.userInfo?["relatedByAttribute"] as? String
+    }
+
+    public func mappingForRelationship(relationship: NSRelationshipDescription) -> CDIMapping? {
+        guard let name = relationship.destinationEntity?.name else {
+            assertionFailure("\(relationship) has no destination entity")
+            return nil
+        }
+        return CDIMapping(entityName: name, inManagedObjectContext: context)
     }
 
     /**
@@ -65,36 +74,15 @@ public class CDIMapping {
         return object
     }
 
-    /**
-     Creates a new managed object for the entity that the relationship points to.
+    public func createManagedObjectWithPrimaryKey(primaryKey: NSObject) -> NSManagedObject {
 
-     - parameter representation:   Representation where the related information should be pulled from.
-     - parameter relationshipName: Name of the relationship to look up on the mapping's entity
+        let object = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: context)
 
-     - returns: Returns the new managed object if created, otherwise returns nil
-     */
-    public func createManagedObjectWithRepresentation(representation: CDIRepresentation, forRelationship relationshipName: String) -> NSManagedObject? {
-
-        let relationshipDescription = entityDescription.relationshipsByName[relationshipName]
-
-        assert(relationshipDescription != nil, "Relationship \(relationshipName) does not exist")
-
-        if let entityName = relationshipDescription?.destinationEntity?.name {
-
-            let object = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: context)
-
-            // Look up the primary key and its value in the representation, then set it on the object
-            if let primaryKeyAttributeName = primaryKeyAttributeNameForEntity(object.entity),
-                representationValue = valueFromRepresentation(representation, forPropertyNamed: relationshipName) {
-
-                object.setValue(representationValue, forKey: primaryKeyAttributeName)
-
-            }
-
-            return object
+        if primaryKeyAttributeName != nil {
+            object.setValue(primaryKey, forKey: primaryKeyAttributeName!)
         }
 
-        return nil
+        return object
     }
 
     /**
@@ -118,6 +106,10 @@ public class CDIMapping {
                     break
                 }
 
+                // TODO: Figure out how to properly assert this
+//                assert(representationValue.isKindOfClass(NSClassFromString(attributeDescription.attributeValueClassName!)!), "The attribute is the wrong type")
+
+
                 if let oldValue = managedObject.valueForKey(attributeName) where oldValue as! NSObject == representationValue {
                     continue
                 }
@@ -125,6 +117,22 @@ public class CDIMapping {
                     managedObject.setValue(representationValue, forKey: attributeName)
                 }
             }
+        }
+    }
+
+
+    public func primaryKeyValueFromUnknownRepresentation(unknownRepresentation: NSObject) -> NSObject? {
+        if let representation = unknownRepresentation as? CDIRepresentation {
+            return valueFromRepresentation(representation, forPropertyNamed: primaryKeyAttributeName!)
+        }
+        else if let representationArray = unknownRepresentation as? CDIRepresentationArray {
+            // TODO: Can do a short hand version of map using $0
+            let array: [AnyObject?] = representationArray.map { valueFromRepresentation( $0, forPropertyNamed: primaryKeyAttributeName!) }
+            return array.filter { $0 != nil }.map { $0! }
+        }
+        else {
+            assertionFailure("unknown representation format: \(unknownRepresentation)")
+            return nil
         }
     }
 
@@ -139,6 +147,15 @@ public class CDIMapping {
         return valueFromRepresentation(representation, forPropertyNamed: primaryKeyAttributeName!)
     }
 
+    public func primaryKeyValueFromRepresentation(representation: CDIRepresentation, forEntity entity: NSEntityDescription) -> NSObject? {
+        if let pkAttributeName = primaryKeyAttributeNameForEntity(entity) {
+            return valueFromRepresentation(representation, forPropertyNamed: pkAttributeName)
+        }
+        else {
+            return nil
+        }
+    }
+
     /**
      Returns the value, from the representation, of the primary key for a relationship.
 
@@ -148,7 +165,11 @@ public class CDIMapping {
      - returns: NSObject of the primary key
      */
     public func primaryKeyValueFromRepresentation(representation: CDIRepresentation, forRelationship relationshipName: String) -> NSObject? {
-        return valueFromRepresentation(representation, forPropertyNamed: relationshipName)
+        var value: NSObject? = valueFromRepresentation(representation, forPropertyNamed: relationshipName)
+        if let relationshipRepresentation = value as? CDIRepresentation {
+            value = primaryKeyValueFromRepresentation(relationshipRepresentation, forRelationship: relationshipName)
+        }
+        return value
     }
 
     /**

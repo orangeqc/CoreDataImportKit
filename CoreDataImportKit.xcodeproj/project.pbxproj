@@ -26,6 +26,16 @@
 		1CA27E111C778EC1005E379B /* CDIImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA27E101C778EC1005E379B /* CDIImportTests.swift */; };
 		1CA27E131C77EFA0005E379B /* NSManagedObject+Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA27E121C77EFA0005E379B /* NSManagedObject+Shortcuts.swift */; };
 		1CE975E01C7D36E400C03404 /* CDIManagedObjectProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE975DF1C7D36E400C03404 /* CDIManagedObjectProtocol.swift */; };
+		1CEB0E421C84DA5200C5D09E /* CDIImportJsonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEB0E411C84DA5200C5D09E /* CDIImportJsonTests.swift */; };
+		1CEB0E441C84DB4200C5D09E /* People.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E431C84DB4200C5D09E /* People.json */; };
+		1CEB0E4B1C84E8C700C5D09E /* Company.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E451C84E8C700C5D09E /* Company.json */; };
+		1CEB0E4C1C84E8C700C5D09E /* PeopleWithRoot.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E461C84E8C700C5D09E /* PeopleWithRoot.json */; };
+		1CEB0E4D1C84E8C700C5D09E /* Person.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E471C84E8C700C5D09E /* Person.json */; };
+		1CEB0E4E1C84E8C700C5D09E /* PersonWithNestedRelationship.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E481C84E8C700C5D09E /* PersonWithNestedRelationship.json */; };
+		1CEB0E4F1C84E8C700C5D09E /* PersonWithRoot.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E491C84E8C700C5D09E /* PersonWithRoot.json */; };
+		1CEB0E501C84E8C700C5D09E /* RawAttributes.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CEB0E4A1C84E8C700C5D09E /* RawAttributes.json */; };
+		1CEB0E531C850E1500C5D09E /* Computer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEB0E511C850E1500C5D09E /* Computer+CoreDataProperties.swift */; };
+		1CEB0E541C850E1500C5D09E /* Computer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEB0E521C850E1500C5D09E /* Computer.swift */; };
 		1CEEDB281C7F8A900039D145 /* EveryAttributeType+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEEDB261C7F8A900039D145 /* EveryAttributeType+CoreDataProperties.swift */; };
 		1CEEDB291C7F8A900039D145 /* EveryAttributeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEEDB271C7F8A900039D145 /* EveryAttributeType.swift */; };
 /* End PBXBuildFile section */
@@ -63,6 +73,16 @@
 		1CA27E101C778EC1005E379B /* CDIImportTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIImportTests.swift; path = Tests/CDIImportTests.swift; sourceTree = "<group>"; };
 		1CA27E121C77EFA0005E379B /* NSManagedObject+Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSManagedObject+Shortcuts.swift"; path = "Utilities/NSManagedObject+Shortcuts.swift"; sourceTree = "<group>"; };
 		1CE975DF1C7D36E400C03404 /* CDIManagedObjectProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIManagedObjectProtocol.swift; path = Utility/CDIManagedObjectProtocol.swift; sourceTree = "<group>"; };
+		1CEB0E411C84DA5200C5D09E /* CDIImportJsonTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIImportJsonTests.swift; path = Tests/CDIImportJsonTests.swift; sourceTree = "<group>"; };
+		1CEB0E431C84DB4200C5D09E /* People.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = People.json; path = Fixtures/People.json; sourceTree = "<group>"; };
+		1CEB0E451C84E8C700C5D09E /* Company.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Company.json; path = Fixtures/Company.json; sourceTree = "<group>"; };
+		1CEB0E461C84E8C700C5D09E /* PeopleWithRoot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = PeopleWithRoot.json; path = Fixtures/PeopleWithRoot.json; sourceTree = "<group>"; };
+		1CEB0E471C84E8C700C5D09E /* Person.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Person.json; path = Fixtures/Person.json; sourceTree = "<group>"; };
+		1CEB0E481C84E8C700C5D09E /* PersonWithNestedRelationship.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = PersonWithNestedRelationship.json; path = Fixtures/PersonWithNestedRelationship.json; sourceTree = "<group>"; };
+		1CEB0E491C84E8C700C5D09E /* PersonWithRoot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = PersonWithRoot.json; path = Fixtures/PersonWithRoot.json; sourceTree = "<group>"; };
+		1CEB0E4A1C84E8C700C5D09E /* RawAttributes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = RawAttributes.json; path = Fixtures/RawAttributes.json; sourceTree = "<group>"; };
+		1CEB0E511C850E1500C5D09E /* Computer+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Computer+CoreDataProperties.swift"; path = "Models/Computer+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1CEB0E521C850E1500C5D09E /* Computer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Computer.swift; path = Models/Computer.swift; sourceTree = "<group>"; };
 		1CEEDB261C7F8A900039D145 /* EveryAttributeType+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "EveryAttributeType+CoreDataProperties.swift"; path = "Models/EveryAttributeType+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		1CEEDB271C7F8A900039D145 /* EveryAttributeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EveryAttributeType.swift; path = Models/EveryAttributeType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -148,6 +168,8 @@
 				1CA27E001C767B83005E379B /* Company.swift */,
 				1CEEDB261C7F8A900039D145 /* EveryAttributeType+CoreDataProperties.swift */,
 				1CEEDB271C7F8A900039D145 /* EveryAttributeType.swift */,
+				1CEB0E511C850E1500C5D09E /* Computer+CoreDataProperties.swift */,
+				1CEB0E521C850E1500C5D09E /* Computer.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -177,6 +199,7 @@
 				1C5645461C6C0B86007D0C24 /* CDIMappingTests.swift */,
 				1C1B24271C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift */,
 				1CA27E101C778EC1005E379B /* CDIImportTests.swift */,
+				1CEB0E411C84DA5200C5D09E /* CDIImportJsonTests.swift */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -192,6 +215,13 @@
 		1CA27E031C767BA5005E379B /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				1CEB0E451C84E8C700C5D09E /* Company.json */,
+				1CEB0E461C84E8C700C5D09E /* PeopleWithRoot.json */,
+				1CEB0E471C84E8C700C5D09E /* Person.json */,
+				1CEB0E481C84E8C700C5D09E /* PersonWithNestedRelationship.json */,
+				1CEB0E491C84E8C700C5D09E /* PersonWithRoot.json */,
+				1CEB0E4A1C84E8C700C5D09E /* RawAttributes.json */,
+				1CEB0E431C84DB4200C5D09E /* People.json */,
 			);
 			name = Fixtures;
 			sourceTree = "<group>";
@@ -294,6 +324,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1CEB0E501C84E8C700C5D09E /* RawAttributes.json in Resources */,
+				1CEB0E4F1C84E8C700C5D09E /* PersonWithRoot.json in Resources */,
+				1CEB0E441C84DB4200C5D09E /* People.json in Resources */,
+				1CEB0E4B1C84E8C700C5D09E /* Company.json in Resources */,
+				1CEB0E4D1C84E8C700C5D09E /* Person.json in Resources */,
+				1CEB0E4E1C84E8C700C5D09E /* PersonWithNestedRelationship.json in Resources */,
+				1CEB0E4C1C84E8C700C5D09E /* PeopleWithRoot.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +355,7 @@
 			files = (
 				1C40E7001C6AC59A0044F2D3 /* CoreDataImportKitTests.swift in Sources */,
 				1C5645471C6C0B86007D0C24 /* CDIMappingTests.swift in Sources */,
+				1CEB0E531C850E1500C5D09E /* Computer+CoreDataProperties.swift in Sources */,
 				1C5645401C6BE63F007D0C24 /* CDICoreData.xcdatamodeld in Sources */,
 				1CEEDB281C7F8A900039D145 /* EveryAttributeType+CoreDataProperties.swift in Sources */,
 				1CA27E021C767B83005E379B /* Company.swift in Sources */,
@@ -325,10 +363,12 @@
 				1C1B24281C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift in Sources */,
 				1CA27E011C767B83005E379B /* Company+CoreDataProperties.swift in Sources */,
 				1CEEDB291C7F8A900039D145 /* EveryAttributeType.swift in Sources */,
+				1CEB0E421C84DA5200C5D09E /* CDIImportJsonTests.swift in Sources */,
 				1C56454C1C6D6B5E007D0C24 /* Printer+CoreDataProperties.swift in Sources */,
 				1C5645431C6C0803007D0C24 /* Person+CoreDataProperties.swift in Sources */,
 				1CA27E131C77EFA0005E379B /* NSManagedObject+Shortcuts.swift in Sources */,
 				1C56454D1C6D6B5E007D0C24 /* Printer.swift in Sources */,
+				1CEB0E541C850E1500C5D09E /* Computer.swift in Sources */,
 				1CA27E111C778EC1005E379B /* CDIImportTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

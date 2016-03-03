@@ -14,17 +14,8 @@ public class CDIManagedObjectCache {
     /// This is the cache of objects. The first key is the class name. The second key is the primary key. The value is the managed object.
     var objectCache: [ String: [ NSObject : NSManagedObject ] ] = [:]
 
-    /// This is a cache of attribute names which represent primary keys. Key is the entity name. Value is the primary key attribute's name.
-    var primaryKeyAttributeNameCache: [ String: String ] = [:]
-
     /// This is the cache of primary key values. Key is the entity name. Value is a set of primary key values.
     var primaryKeyValuesCache: [String: Set<NSObject> ] = [:]
-
-    /// The representation data that this cache will work with.
-    let externalRepresentation: CDIExternalRepresentation
-
-    /// The mapping that should be used to pull data out of the representation.
-    let mapping: CDIMapping
 
     /// The managed object context used to look up entities
     let context: NSManagedObjectContext
@@ -38,46 +29,85 @@ public class CDIManagedObjectCache {
 
      - returns: CDIManagedObjectCache
      */
-    init(externalRepresentation: CDIExternalRepresentation, mapping: CDIMapping, context: NSManagedObjectContext) {
-        self.externalRepresentation = externalRepresentation
-        self.mapping = mapping
+    public init(context: NSManagedObjectContext) {
         self.context = context
     }
 
-    /**
-     Builds the cache for the main entity in the representation.
-     */
-    public func buildCacheForBaseEntity() {
-        resetCacheForBaseEntity()
-
-        // Build up the cache of primary keys for each representation
+    public func buildCacheForExternalRepresentation(externalRepresentation: CDIExternalRepresentation, usingMapping mapping: CDIMapping) {
         let representations = mapping.represenationArrayFromExternalRepresentation(externalRepresentation)
         for representation in representations {
-            buildPrimaryKeysCacheWithRepresentation(representation)
+            buildCacheForRepresentation(representation, usingMapping: mapping)
         }
-
-        // Fetch all entities from CoreData
-        fetchExistingObjectsForEntity(mapping.entityName)
     }
 
-    /**
-     Builds the cache for the related entities.
-     */
-    public func buildCacheForRelatedEntities() {
-        resetCacheForRelationships()
+    func buildCacheForRepresentation(representation: CDIRepresentation, usingMapping mapping: CDIMapping) {
+        if let primaryKeyAttributeName = mapping.primaryKeyAttributeName,
+            primaryKeyValue = mapping.valueFromRepresentation(representation, forPropertyNamed: primaryKeyAttributeName) {
 
-        // Add the primary key value for each relationship
-        let representations = mapping.represenationArrayFromExternalRepresentation(externalRepresentation)
-        for representation in representations {
-            buildPrimaryKeysCacheForRelationshipsWithRepresentation(representation)
+            // If the set hasn't been set, then set a blank set
+            if primaryKeyValuesCache[mapping.entityName] == nil {
+                primaryKeyValuesCache[mapping.entityName] = []
+            }
+
+            // Add primary key to the cache
+            primaryKeyValuesCache[mapping.entityName]?.insert(primaryKeyValue);
         }
 
-        fetchExistingObjectsForRelationships()
+        // Loop over each relationship
+        for (_, relationshipDescription) in mapping.relationshipsByName {
+
+            if let entity = relationshipDescription.destinationEntity,
+                destinationEntityName = entity.name,
+                representationValue = mapping.valueFromRepresentation(representation, forProperty: relationshipDescription),
+                destinationEntityMapping = mapping.mappingForRelationship(relationshipDescription) {
+
+                    // To-many relationship that has an array of associated objects
+                    if let representationArray = representationValue as? CDIRepresentationArray {
+                        buildCacheForExternalRepresentation(representationArray, usingMapping: destinationEntityMapping)
+                    }
+                    // To-one that is nested inside the representation
+                    else if let singleRepresentation = representationValue as? CDIRepresentation {
+                        buildCacheForExternalRepresentation(singleRepresentation, usingMapping: destinationEntityMapping)
+                    }
+                    // Just has a foreign key as a part of the representation
+                    else {
+                        if primaryKeyValuesCache[destinationEntityName] == nil {
+                            primaryKeyValuesCache[destinationEntityName] = []
+                        }
+                        primaryKeyValuesCache[destinationEntityName]?.insert(representationValue)
+                    }
+            }
+
+        }
     }
 
     /// Checks to see if a managed object has been cached already. Should to an internal validation check to make sure that building the cache has happened already.
-    public func managedObjectForEntity(entityName: String, primaryKeyValue: NSObject) -> NSManagedObject? {
-        return objectCache[entityName]?[primaryKeyValue];
+    public func managedObjectForRepresentation(representation: CDIRepresentation, usingMapping mapping: CDIMapping) -> NSManagedObject? {
+
+        let cache = objectCacheForMapping(mapping)
+
+        if let primaryKeyValue = mapping.primaryKeyValueFromRepresentation(representation) {
+            return cache[primaryKeyValue]
+        }
+        else {
+            return nil
+        }
+    }
+
+    public func managedObjectForPrimaryKey(primaryKeyValue: NSObject, usingMapping mapping: CDIMapping) ->  NSManagedObject? {
+        let cache = objectCacheForMapping(mapping)
+        return cache[primaryKeyValue]
+    }
+
+    public func objectCacheForMapping(mapping: CDIMapping) -> [ NSObject : NSManagedObject ] {
+        var cache = objectCache[mapping.entityName]
+
+        if cache == nil {
+            cache = fetchExistingObjectsForMapping(mapping)
+            objectCache[mapping.entityName] = cache
+        }
+
+        return cache ?? [:] // could also do cache!
     }
 
     /**
@@ -87,105 +117,54 @@ public class CDIManagedObjectCache {
 
      - parameter managedObject: Object to add to the cache
      */
-    public func addManagedObjectToCache(managedObject: NSManagedObject) {
+    public func addManagedObjectToCache(managedObject: NSManagedObject, usingMapping mapping: CDIMapping) {
         if let entityName = managedObject.entity.name,
             primaryKeyValue = mapping.primaryKeyValueForManagedObject(managedObject) {
 
             objectCache[entityName]?.updateValue(managedObject, forKey: primaryKeyValue)
-
         }
+    }
+
+    public func resetCache() {
+        primaryKeyValuesCache = [:]
+        objectCache = [:]
     }
 
     // MARK: Private Methods
 
-    // Resets the caches for the base entity
-    func resetCacheForBaseEntity() {
-        primaryKeyAttributeNameCache[mapping.entityName] = mapping.primaryKeyAttributeName!
-        primaryKeyValuesCache[mapping.entityName] = []
-    }
-
-    /// Set primary key attribute name for each relationship and initialize the primary keys value cache
-    func resetCacheForRelationships() {
-        for relationshipDescription in mapping.relationshipsByName.values {
-
-            if let entity = relationshipDescription.destinationEntity,
-                primaryKeyAttributeName = mapping.primaryKeyAttributeNameForEntity(entity),
-                entityName = entity.name {
-
-                    primaryKeyAttributeNameCache[entityName] = primaryKeyAttributeName
-                    primaryKeyValuesCache[entityName] = []
-
-            }
-        }
-    }
-
-    /// Adds the representation's primary key to the cache
-    func buildPrimaryKeysCacheWithRepresentation(representation: CDIRepresentation) {
-
-        // Add the primary key to the cache
-        if let primaryKey = mapping.primaryKeyValueFromRepresentation(representation) {
-            primaryKeyValuesCache[mapping.entityName]?.insert(primaryKey);
-        }
-
-    }
-
-    /// Adds the primary keys for the entity's relationships, using the values in the representation
-    func buildPrimaryKeysCacheForRelationshipsWithRepresentation(representation: CDIRepresentation) {
-        // Loop over each relationship
-        for (relationship, relationshipDescription) in mapping.relationshipsByName {
-
-            if let entity = relationshipDescription.destinationEntity,
-                entityName = entity.name,
-                primaryKeyValue = mapping.primaryKeyValueFromRepresentation(representation, forRelationship: relationship) {
-
-                    // Add the primary key value to the cache
-                    primaryKeyValuesCache[entityName]?.insert(primaryKeyValue)
-                    
-            }
-        }
-    }
-
     /// Looks up all managed objects based on the primary keys in the cache
-    func fetchExistingObjectsForEntity(entityName: String) {
+    func fetchExistingObjectsForMapping(mapping: CDIMapping) -> [ NSObject : NSManagedObject ] {
         // Make sure we have the primaryKeys and the primaryKey for the entity in question
-        guard let primaryKeys = primaryKeyValuesCache[entityName], let primaryKey = primaryKeyAttributeNameCache[entityName] else {
-            return
+        let entityName = mapping.entityName
+        guard let primaryKeys = primaryKeyValuesCache[entityName], primaryKeyAttributeName = mapping.primaryKeyAttributeName else {
+            return [:]
         }
 
-        // Set the base value for the entity name
-        if objectCache.indexForKey(entityName) == nil {
-            objectCache[entityName] = [:]
-        }
+        var cache: [ NSObject : NSManagedObject ] = [:]
 
         // Build fetch request
         let fetchRequest = NSFetchRequest(entityName: entityName)
-        let predicate = NSPredicate(format: "%K in %@", primaryKey, primaryKeys);
+        let predicate = NSPredicate(format: "%K in %@", primaryKeyAttributeName, primaryKeys);
         fetchRequest.predicate = predicate
         fetchRequest.fetchLimit = primaryKeys.count
 
         // Execute the fetch request and update the object cache
         do {
             let existingObjects = try context.executeFetchRequest(fetchRequest)
-            for object in existingObjects {
-                let primaryKeyForObject = object.valueForKey(primaryKey) as! NSObject
-                objectCache[entityName]?.updateValue(object as! NSManagedObject, forKey: primaryKeyForObject)
+            for object in existingObjects as! [NSManagedObject] {
+                if let primaryKeyValue = object.valueForKey(primaryKeyAttributeName) as? NSObject {
+                    cache[primaryKeyValue] = object
+                }
+                else {
+                    print("Object imported for \(entityName) doesn't have a primary key set")
+                }
             }
         }
         catch {
             print("Failed to fetch objects.")
         }
+
+        return cache
     }
 
-    /// Loop over each relationship to look up the managed objects
-    func fetchExistingObjectsForRelationships() {
-        for relationshipDescription in mapping.relationshipsByName.values {
-
-            if let entity = relationshipDescription.destinationEntity,
-                entityName = entity.name {
-
-                    fetchExistingObjectsForEntity(entityName)
-
-            }
-        }
-    }
 }

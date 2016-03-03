@@ -1,0 +1,13 @@
+{
+  "person": {
+    "id" : 1,
+    "fullName" : "John Smith",
+    "age": 30,
+    "companyId": 5,
+    "company": {
+      "id": 5,
+      "name": "Blue Inc.",
+      "founded": "2016"
+    }
+  }
+}

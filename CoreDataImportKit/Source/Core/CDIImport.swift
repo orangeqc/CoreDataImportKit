@@ -130,8 +130,6 @@ public class CDIImport {
                 continue
             }
 
-            // TODO: Convert first two sections into one if statement and create a buildRelationshipsForExternalRepresentation(_:usingMapping:) to handle internals
-
             // To-many relationship that has an array of associated objects
             if let representationArray = representationValue as? CDIRepresentationArray {
                 for relationshipRepresentation in representationArray {

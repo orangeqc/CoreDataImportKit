@@ -8,4 +8,6 @@ WIP
 
 ## Usage
 
+## Contributing
+
 ## Extra

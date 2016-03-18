@@ -10,6 +10,8 @@
 		1C1B24261C73F95C00F1EE2E /* CDIManagedObjectCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B24251C73F95C00F1EE2E /* CDIManagedObjectCache.swift */; };
 		1C1B24281C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B24271C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift */; };
 		1C1B242D1C752AEB00F1EE2E /* CDIRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B242C1C752AEB00F1EE2E /* CDIRepresentation.swift */; };
+		1C24A1AA1C9CB2D400C12B1A /* Callback+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C24A1A81C9CB2D400C12B1A /* Callback+CoreDataProperties.swift */; };
+		1C24A1AB1C9CB2D400C12B1A /* Callback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C24A1A91C9CB2D400C12B1A /* Callback.swift */; };
 		1C40E6F41C6AC59A0044F2D3 /* CoreDataImportKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C40E6F31C6AC59A0044F2D3 /* CoreDataImportKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1C40E6FB1C6AC59A0044F2D3 /* CoreDataImportKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C40E6F01C6AC5990044F2D3 /* CoreDataImportKit.framework */; };
 		1C40E7001C6AC59A0044F2D3 /* CoreDataImportKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C40E6FF1C6AC59A0044F2D3 /* CoreDataImportKitTests.swift */; };
@@ -53,6 +55,8 @@
 		1C1B24251C73F95C00F1EE2E /* CDIManagedObjectCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIManagedObjectCache.swift; path = Source/Core/CDIManagedObjectCache.swift; sourceTree = "<group>"; };
 		1C1B24271C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIManagedObjectCacheTests.swift; path = Tests/CDIManagedObjectCacheTests.swift; sourceTree = "<group>"; };
 		1C1B242C1C752AEB00F1EE2E /* CDIRepresentation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDIRepresentation.swift; path = Utility/CDIRepresentation.swift; sourceTree = "<group>"; };
+		1C24A1A81C9CB2D400C12B1A /* Callback+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Callback+CoreDataProperties.swift"; path = "Models/Callback+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1C24A1A91C9CB2D400C12B1A /* Callback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Callback.swift; path = Models/Callback.swift; sourceTree = "<group>"; };
 		1C40E6F01C6AC5990044F2D3 /* CoreDataImportKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreDataImportKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C40E6F31C6AC59A0044F2D3 /* CoreDataImportKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataImportKit.h; sourceTree = "<group>"; };
 		1C40E6F51C6AC59A0044F2D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -168,6 +172,8 @@
 				1CEEDB271C7F8A900039D145 /* EveryAttributeType.swift */,
 				1CEB0E511C850E1500C5D09E /* Computer+CoreDataProperties.swift */,
 				1CEB0E521C850E1500C5D09E /* Computer.swift */,
+				1C24A1A81C9CB2D400C12B1A /* Callback+CoreDataProperties.swift */,
+				1C24A1A91C9CB2D400C12B1A /* Callback.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -355,8 +361,10 @@
 				1C5645401C6BE63F007D0C24 /* CDICoreData.xcdatamodeld in Sources */,
 				1CEEDB281C7F8A900039D145 /* EveryAttributeType+CoreDataProperties.swift in Sources */,
 				1CA27E021C767B83005E379B /* Company.swift in Sources */,
+				1C24A1AB1C9CB2D400C12B1A /* Callback.swift in Sources */,
 				1C5645441C6C0803007D0C24 /* Person.swift in Sources */,
 				1C1B24281C73FB8200F1EE2E /* CDIManagedObjectCacheTests.swift in Sources */,
+				1C24A1AA1C9CB2D400C12B1A /* Callback+CoreDataProperties.swift in Sources */,
 				1CA27E011C767B83005E379B /* Company+CoreDataProperties.swift in Sources */,
 				1CEEDB291C7F8A900039D145 /* EveryAttributeType.swift in Sources */,
 				1CEB0E421C84DA5200C5D09E /* CDIImportJsonTests.swift in Sources */,

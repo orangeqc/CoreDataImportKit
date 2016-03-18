@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Xcode 7.0">
+    <entity name="Callback" representedClassName=".Callback" syncable="YES">
+        <attribute name="calledDidImport" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="calledShouldBuildRelationship" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="calledShouldImport" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="calledShouldImportAttribute" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="calledWillImport" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="testAttribute" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="everyAttribute" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EveryAttributeType" inverseName="callback" inverseEntity="EveryAttributeType" syncable="YES"/>
+        <userInfo>
+            <entry key="relatedByAttribute" value="id"/>
+        </userInfo>
+    </entity>
     <entity name="Company" representedClassName=".Company" syncable="YES">
         <attribute name="founded" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -38,6 +51,7 @@
             </userInfo>
         </attribute>
         <attribute name="stringAttribute" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="callback" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Callback" inverseName="everyAttribute" inverseEntity="Callback" syncable="YES"/>
         <userInfo>
             <entry key="relatedByAttribute" value="integerAttribute"/>
         </userInfo>
@@ -65,9 +79,10 @@
     </entity>
     <elements>
         <element name="Company" positionX="-54" positionY="9" width="128" height="120"/>
-        <element name="EveryAttributeType" positionX="-63" positionY="36" width="128" height="180"/>
+        <element name="Computer" positionX="-63" positionY="81" width="128" height="120"/>
+        <element name="EveryAttributeType" positionX="-63" positionY="36" width="128" height="195"/>
         <element name="Person" positionX="-63" positionY="-18" width="128" height="120"/>
         <element name="Printer" positionX="-54" positionY="18" width="128" height="60"/>
-        <element name="Computer" positionX="-63" positionY="81" width="128" height="120"/>
+        <element name="Callback" positionX="-54" positionY="81" width="128" height="165"/>
     </elements>
 </model>

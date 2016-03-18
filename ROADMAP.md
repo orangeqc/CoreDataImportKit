@@ -7,6 +7,7 @@ If you want to know what features this project plans on implementing or want to 
 - Have the mapping cache the mappings for the relationships.
 - Discuss if the primary key should be required. If it should, then assert that it exists.
 - Add tests for many-to-many relationship.
+- Provide a way to create a CDIRepresentation given a managedObject (for exporting) - might be better as a second project.
 - [Someday] Implement a mapping for JSON API.
 
 Don’t see the feature you want? Please feel free to open a GH issue to discuss adding it to the project.

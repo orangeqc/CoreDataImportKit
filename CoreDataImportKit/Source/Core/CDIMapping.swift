@@ -109,6 +109,12 @@ public class CDIMapping {
 
         for (attributeName, attributeDescription) in entityDescription.attributesByName {
 
+            let shouldImportAttribute = (managedObject as CDIManagedObjectProtocol).shouldImportAttribute?(attributeName, inRepresentation: representation) ?? true
+
+            if (shouldImportAttribute == false) {
+                continue
+            }
+
             // Grab the value from the representation
             if var representationValue: NSObject = valueFromRepresentation(representation, forProperty: attributeDescription) {
 

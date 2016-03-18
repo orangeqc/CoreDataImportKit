@@ -2,7 +2,7 @@
 //  Printer+CoreDataProperties.swift
 //  CoreDataImportKit
 //
-//  Created by Ryan Mathews on 2/25/16.
+//  Created by Ryan Mathews on 3/18/16.
 //  Copyright © 2016 OrangeQC. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu

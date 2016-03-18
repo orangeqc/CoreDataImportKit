@@ -272,4 +272,39 @@ class CDIMappingTests: CoreDataImportKitTests {
         XCTAssertEqual(mapping.lookupKeyForProperty(ageProperty!), "age")
     }
 
+    // MARK: Test callbacks
+
+    func testCallbackShouldImportAttributeWithTrue() {
+        let externalRepresentation = [ "id": 1, "testAttribute" : "yes", "shouldImportAttribute" : true ]
+        let mapping = CDIMapping(entityName: "Callback", inManagedObjectContext: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
+
+        cdiImport.importRepresentation()
+
+        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext) {
+            XCTAssertEqual(callback.id, 1)
+            XCTAssertEqual(callback.calledShouldImportAttribute, true)
+            XCTAssertEqual(callback.testAttribute, "yes")
+        }
+        else {
+            XCTFail()
+        }
+    }
+
+    func testCallbackShouldImportAttributeWithFalse() {
+        let externalRepresentation = [ "id": 1, "testAttribute" : "yes", "shouldImportAttribute" : false ]
+        let mapping = CDIMapping(entityName: "Callback", inManagedObjectContext: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
+
+        cdiImport.importRepresentation()
+
+        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext) {
+            XCTAssertEqual(callback.id, 1)
+            XCTAssertEqual(callback.calledShouldImportAttribute, true)
+            XCTAssertNil(callback.testAttribute)
+        }
+        else {
+            XCTFail()
+        }
+    }
 }

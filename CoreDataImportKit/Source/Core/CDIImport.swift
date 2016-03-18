@@ -130,6 +130,11 @@ public class CDIImport {
                 continue
             }
 
+            let shouldBuildRelationship = (managedObject as CDIManagedObjectProtocol).shouldBuildRelationship?(relationshipName, withRelationshipRepresentation: representationValue, fromRepresentation: representation) ?? true
+            if shouldBuildRelationship == false {
+                continue
+            }
+
             // To-many relationship that has an array of associated objects
             if let representationArray = representationValue as? CDIRepresentationArray {
                 for relationshipRepresentation in representationArray {

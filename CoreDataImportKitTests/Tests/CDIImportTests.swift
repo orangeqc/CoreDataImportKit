@@ -105,4 +105,100 @@ class CDIImportTests: CoreDataImportKitTests {
         }
     }
 
+    // MARK: Test callbacks
+
+    func testCallbackShouldImportWithTrue() {
+        let externalRepresentation = [ "id": 1, "testAttribute" : "yes", "shouldImport" : true ]
+        let mapping = CDIMapping(entityName: "Callback", inManagedObjectContext: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
+
+        cdiImport.importRepresentation()
+
+        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext) {
+                XCTAssertEqual(callback.id, 1)
+                XCTAssertEqual(callback.testAttribute, "yes")
+        }
+        else {
+            XCTFail()
+        }
+    }
+
+    func testCallbackShouldImportWithFalse() {
+        let externalRepresentation = [ "id": 1, "testAttribute" : "nope", "shouldImport" : false ]
+        let mapping = CDIMapping(entityName: "Callback", inManagedObjectContext: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
+
+        cdiImport.importRepresentation()
+
+        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext) {
+            XCTAssertEqual(callback.id, 1)
+            XCTAssertNil(callback.testAttribute)
+        }
+        else {
+            XCTFail()
+        }
+    }
+
+    func testCallbackWillImport() {
+        let externalRepresentation = [ "id": 1, "testAttribute" : "yes" ]
+        let mapping = CDIMapping(entityName: "Callback", inManagedObjectContext: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
+
+        cdiImport.importRepresentation()
+
+        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext) {
+            XCTAssertEqual(callback.calledWillImport, true)
+        }
+        else {
+            XCTFail()
+        }
+    }
+
+    func testCallbackDidImport() {
+        let externalRepresentation = [ "id": 1, "testAttribute" : "yes" ]
+        let mapping = CDIMapping(entityName: "Callback", inManagedObjectContext: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
+
+        cdiImport.importRepresentation()
+
+        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext) {
+            XCTAssertEqual(callback.calledDidImport, true)
+        }
+        else {
+            XCTFail()
+        }
+    }
+
+    func testCallbackShouldBuildRelationshipWithTrue() {
+        let externalRepresentation = [ "id": 1, "shouldBuildRelationship" : true, "everyAttribute": [ "integerAttribute": 3 ] ]
+        let mapping = CDIMapping(entityName: "Callback", inManagedObjectContext: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
+
+        cdiImport.importRepresentation()
+
+        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext),
+            everyAttribute = callback.everyAttribute {
+            XCTAssertEqual(callback.calledShouldBuildRelationship, true)
+            XCTAssertEqual(everyAttribute.integerAttribute, 3)
+        }
+        else {
+            XCTFail()
+        }
+    }
+
+    func testCallbackShouldBuildRelationshipWithFalse() {
+        let externalRepresentation = [ "id": 1, "shouldBuildRelationship" : false, "everyAttribute": [ "integerAttribute": 3 ] ]
+        let mapping = CDIMapping(entityName: "Callback", inManagedObjectContext: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
+
+        cdiImport.importRepresentation()
+
+        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext) {
+                XCTAssertEqual(callback.calledShouldBuildRelationship, true)
+                XCTAssertNil(callback.everyAttribute)
+        }
+        else {
+            XCTFail()
+        }
+    }
 }

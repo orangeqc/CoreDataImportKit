@@ -239,17 +239,18 @@ public class CDIMapping {
 
      - returns: Value found at the key path
      */
-    func valueFromRepresentation(var representation: CDIRepresentation, forProperty property: NSPropertyDescription) -> NSObject? {
+    func valueFromRepresentation(let representation: CDIRepresentation, forProperty property: NSPropertyDescription) -> NSObject? {
+        var newRepresentation = representation
         var keys = lookupKeyForProperty(property).componentsSeparatedByString(".")
         var key = keys.removeFirst()
 
         // Dig into each nested dictionary until there is no more
-        while !keys.isEmpty, let newRep = representation[key] as? CDIRepresentation {
+        while !keys.isEmpty, let newRep = newRepresentation[key] as? CDIRepresentation {
             key = keys.removeFirst()
-            representation = newRep
+            newRepresentation = newRep
         }
 
-        return keys.isEmpty ? representation[key] : nil
+        return keys.isEmpty ? newRepresentation[key] : nil
     }
 
     /**

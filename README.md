@@ -34,7 +34,11 @@ cdiImport.importRepresentation()
 
 In this example `array` is an array of dictionaries that each define a `Company`. That is all there is.
 
-> Coming soon: I’ll be adding a shortcut to do the above in one line.
+Optionally you can use the helper:
+
+```swift
+Company.cdiImportFromRepresentation(externalRepresentation: array, inContext: localContext)
+```
 
 Check out the wiki (soon) to learn more about the details. You can find out more about the representations and learn to create your own import strategy.
 

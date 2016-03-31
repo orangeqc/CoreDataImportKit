@@ -54,9 +54,9 @@ public class CDIMapping {
     }
 
     /**
-     Creates a new managed object based on this mapping's entity. If the primary key is defined and 
+     Creates a new managed object based on this mapping's entity. If the primary key is defined and
      is in the representation then it will set the primary key.
-     
+
      Note: This does not save the managed object context, you are responsible for that
 
      - parameter representation: CDIRepresentation representing a managed object
@@ -109,11 +109,6 @@ public class CDIMapping {
 
         for (attributeName, attributeDescription) in entityDescription.attributesByName {
 
-            let shouldImportAttribute = (managedObject as CDIManagedObjectProtocol).shouldImportAttribute?(attributeName, inRepresentation: representation) ?? true
-
-            if (shouldImportAttribute == false) {
-                continue
-            }
 
             // Grab the value from the representation
             if var representationValue: NSObject = valueFromRepresentation(representation, forProperty: attributeDescription) {
@@ -121,9 +116,18 @@ public class CDIMapping {
                 let attributeType = attributeDescription.attributeType
 
                 // Modify the representationValue based on the attribute type
-                // If additional attribute types need to be modified, then change to switch statement
+                // TODO: Move to seperate method
+                // TODO: Change to switch statement
+                // TODO: Support all attribute types
+                // This is based on NSAttributeDescription+MagicalDataImport's
+                // MR_valueForKeyPath:fromObjectData:
                 if attributeType == .DateAttributeType {
                     representationValue = dateFromRepresentationValue(representationValue, forAttribute:attributeDescription)!
+                }
+                else if attributeType == .StringAttributeType &&
+                    representationValue.isKindOfClass(NSString) == false &&
+                    representationValue.isKindOfClass(NSNull) == false {
+                    representationValue = representationValue.description
                 }
 
                 // Only set the new value if it is different from the old value
@@ -131,7 +135,13 @@ public class CDIMapping {
                     continue
                 }
                 else {
-                    managedObject.setValue(representationValue, forKey: attributeName)
+
+                    let shouldImportAttribute = (managedObject as CDIManagedObjectProtocol).shouldImportAttribute?(attributeName, withData: representationValue, inRepresentation: representation) ?? true
+
+                    if (shouldImportAttribute) {
+                        managedObject.setValue(representationValue, forKey: attributeName)
+                    }
+
                 }
             }
         }
@@ -182,14 +192,14 @@ public class CDIMapping {
     }
 
     /**
-     Returns an array of dictionaries which represent objects to be imported. 
-     This method returns what it is given. It is intended to be overwritten by 
+     Returns an array of dictionaries which represent objects to be imported.
+     This method returns what it is given. It is intended to be overwritten by
      subclasses if they need to extract data from a more complex representation.
 
      - parameter externalRepresentation: External representation
 
      - returns: Array of dictionaries which represent objects.
-     
+
      */
     public func extractRootFromExternalRepresentation(externalRepresentation: CDIExternalRepresentation) -> CDIRootRepresentation {
         return externalRepresentation;
@@ -200,7 +210,7 @@ public class CDIMapping {
      easier to work with just CDIRepresentationArray.
 
      This method will return a CDIRepresentationArray regardless of the input.
-     
+
      This will call `extractRootFromExternalRepresentation` to get the base representation.
 
      - parameter externalRepresentation: External representation to convert

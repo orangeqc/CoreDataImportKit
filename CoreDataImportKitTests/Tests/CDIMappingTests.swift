@@ -115,6 +115,24 @@ class CDIMappingTests: CoreDataImportKitTests {
             XCTFail("Unable to create person")
         }
     }
+    
+    func testUpdateManagedObjectAttributesWithRepresentationWithArrayForString() {
+        let representation = [ "id": 123, "fullName": ["John", "Doe"] ]
+        
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        let managedObject = mapping.createManagedObjectWithRepresentation(representation)
+        mapping.updateManagedObjectAttributes(managedObject, withRepresentation:representation)
+        
+        XCTAssertEqual(managedObject.entity.name!, "Person")
+        
+        if let person = managedObject as? Person {
+            XCTAssertEqual(person.id, 123)
+            XCTAssertEqual(person.name, "(\n    John,\n    Doe\n)")
+        }
+        else {
+            XCTFail("Unable to create person")
+        }
+    }
 
     func testUpdateManagedObjectAttributesWithRepresentationForAllAttributeTypes() {
         let representation = [

@@ -36,7 +36,7 @@ class Callback: NSManagedObject {
         }
     }
 
-    func shouldImportAttribute(attributeName: String, inRepresentation representation: CDIRepresentation) -> Bool {
+    func shouldImportAttribute(attributeName: String, withData data: AnyObject, inRepresentation representation: CDIRepresentation) -> Bool {
         self.calledShouldImportAttribute = true
 
         if let shouldImportAttributeNumber: NSNumber = (representation["shouldImportAttribute"] as? NSNumber),

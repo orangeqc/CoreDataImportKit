@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = "CoreDataImportKit"
-  spec.version = "0.1.0"
+  spec.version = "0.1.1"
   spec.summary = "Swift framework for importing data into CoreData."
   spec.homepage = "https://github.com/orangeqc/CoreDataImportKit"
   spec.license = { type: 'MIT', file: 'LICENSE' }

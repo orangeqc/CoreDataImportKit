@@ -11,6 +11,12 @@ import CoreData
 
 @testable import CoreDataImportKit
 
+extension CDIMapping: Equatable {}
+
+public func ==(lhs: CDIMapping, rhs: CDIMapping) -> Bool {
+    return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
+}
+
 class CDIMappingTests: CoreDataImportKitTests {
 
     override func setUp() {
@@ -37,6 +43,18 @@ class CDIMappingTests: CoreDataImportKitTests {
 
             XCTAssertEqual(computerMapping.entityName, "Computer")
             XCTAssertEqual(computerMapping.context, managedObjectContext)
+        }
+        else {
+            XCTFail()
+        }
+    }
+
+    func testMappingForRelationshipPointsBackToItself() {
+        let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
+        if let boss = mapping.entityDescription.relationshipsByName["boss"],
+            personMapping = mapping.mappingForRelationship(boss){
+
+            XCTAssertEqual(personMapping, mapping)
         }
         else {
             XCTFail()

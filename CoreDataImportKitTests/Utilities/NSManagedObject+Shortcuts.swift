@@ -13,7 +13,14 @@ extension NSManagedObject {
 
     class func findFirstByAttribute<T: NSManagedObject>(attribute: String, withValue value: NSObject, inContext context: NSManagedObjectContext) -> T? {
         let fetchRequest = NSFetchRequest(entityName: String(T))
-        let predicate = NSPredicate(format: "\(attribute) = \(value)")
+        var predicate : NSPredicate
+        if let value = value as? String {
+            predicate = NSPredicate(format: "\(attribute) == '\(value)'")
+        }
+        else {
+            predicate = NSPredicate(format: "\(attribute) == \(value)")
+        }
+
         fetchRequest.predicate = predicate
 
         do {

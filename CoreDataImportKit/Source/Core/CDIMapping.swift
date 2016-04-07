@@ -50,7 +50,13 @@ public class CDIMapping {
             assertionFailure("\(relationship) has no destination entity")
             return nil
         }
-        return CDIMapping(entityName: name, inManagedObjectContext: context)
+
+        if entityName == name {
+            return self
+        }
+        else {
+            return CDIMapping(entityName: name, inManagedObjectContext: context)
+        }
     }
 
     /**

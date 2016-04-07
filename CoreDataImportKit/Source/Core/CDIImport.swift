@@ -174,6 +174,8 @@ public class CDIImport {
                 // If it does not exist, create it, and set the primary key
                 if relatedManagedObject == nil {
                     relatedManagedObject = destinationEntityMapping.createManagedObjectWithPrimaryKey(representationValue)
+
+                    cache.addManagedObjectToCache(relatedManagedObject!, usingMapping: destinationEntityMapping)
                 }
 
                 // Build the relationship

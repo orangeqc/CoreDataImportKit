@@ -70,8 +70,9 @@ class CDIImportTests: CoreDataImportKitTests {
 
         if let person: Person = Person.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext),
         company: Company = Company.findFirstByAttribute("id", withValue: 5, inContext: managedObjectContext) {
-                XCTAssertEqual(company.id, 5)
-                XCTAssertEqual(person.job, company)
+            XCTAssertEqual(company.id, 5)
+            XCTAssertEqual(person.job, company)
+            XCTAssertTrue(company.employees!.containsObject(person))
         }
         else {
             XCTFail()
@@ -93,6 +94,8 @@ class CDIImportTests: CoreDataImportKitTests {
             XCTAssertEqual(person1.job, company)
             XCTAssertEqual(person2.job, company)
             XCTAssertEqual(Company.countInContext(managedObjectContext), 1)
+            XCTAssertTrue(company.employees!.containsObject(person1))
+            XCTAssertTrue(company.employees!.containsObject(person2))
         }
         else {
             XCTFail()
@@ -113,12 +116,13 @@ class CDIImportTests: CoreDataImportKitTests {
         if let person: Person = Person.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext),
             company: Company = Company.findFirstByAttribute("id", withValue: 5, inContext: managedObjectContext) {
 
-                XCTAssertEqual(company.id, 5)
-                XCTAssertEqual(person.job, company)
-                XCTAssertEqual(c, company)
+            XCTAssertEqual(company.id, 5)
+            XCTAssertEqual(person.job, company)
+            XCTAssertEqual(c, company)
+            XCTAssertTrue(company.employees!.containsObject(person))
 
-                let count = Company.countInContext(managedObjectContext)
-                XCTAssertEqual(count, 1)
+            let count = Company.countInContext(managedObjectContext)
+            XCTAssertEqual(count, 1)
 
         }
         else {
@@ -144,6 +148,8 @@ class CDIImportTests: CoreDataImportKitTests {
             XCTAssertEqual(computer1.company, company)
             XCTAssertEqual(computer2.company, company)
             XCTAssertEqual(Company.countInContext(managedObjectContext), 1)
+            XCTAssertTrue(company.computers!.containsObject(computer1))
+            XCTAssertTrue(company.computers!.containsObject(computer2))
         }
         else {
             XCTFail()
@@ -168,6 +174,7 @@ class CDIImportTests: CoreDataImportKitTests {
             XCTAssertEqual(company.id, 5)
             XCTAssertEqual(computer.company, company)
             XCTAssertEqual(c, company)
+            XCTAssertTrue(company.computers!.containsObject(computer))
 
             XCTAssertEqual(Company.countInContext(managedObjectContext), 1)
         }

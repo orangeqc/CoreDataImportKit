@@ -18,5 +18,6 @@ extension Company {
     @NSManaged var name: String?
     @NSManaged var founded: String?
     @NSManaged var employees: NSSet?
+    @NSManaged var computers: NSSet?
 
 }

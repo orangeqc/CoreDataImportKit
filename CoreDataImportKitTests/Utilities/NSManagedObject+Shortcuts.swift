@@ -33,16 +33,15 @@ extension NSManagedObject {
 
     class func countInContext(context: NSManagedObjectContext) -> Int {
         let fetchRequest = NSFetchRequest(entityName: String(self))
-
-        var error: NSError? = nil
-        let count = context.countForFetchRequest(fetchRequest, error: &error)
-        if let e = error {
-            print("Error finding count in \(String(self)): \(e)")
-            return 0
+        
+        var count: Int = 0
+        do {
+            count = try context.countForFetchRequest(fetchRequest)
         }
-        else {
-            return count
+        catch {
+            print("Error finding count in \(String(self)): \(error)")
         }
+        return count
     }
 
     class func createObjectWithAttributes<T: NSManagedObject>(attributes: [ String: NSObject ], inContext context: NSManagedObjectContext) -> T {

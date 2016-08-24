@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.2.0 (2016-08-24)
+
+* Upgrade to Swift 2.3
+
 ## Version 0.1.2 (2016-04-07)
 
 * [BUG] Fixed bug with building to-one relationships

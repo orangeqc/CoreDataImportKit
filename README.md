@@ -50,4 +50,4 @@ If you want to discuss changes before writing the code, go ahead and create a Gi
 
 ## Extra
 
-CoreDataImportKit was written by Ryan Mathews, you can follow me on [twitter](https://twitter.com/ryanjm33).
+CoreDataImportKit was written by Ryan Mathews, you can follow me on [twitter](https://twitter.com/ryanjm_).

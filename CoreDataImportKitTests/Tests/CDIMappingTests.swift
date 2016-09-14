@@ -39,7 +39,7 @@ class CDIMappingTests: CoreDataImportKitTests {
     func testMappingForRelationship() {
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         if let computer = mapping.entityDescription.relationshipsByName["computer"],
-            computerMapping = mapping.mappingForRelationship(computer){
+            let computerMapping = mapping.mappingForRelationship(computer){
 
             XCTAssertEqual(computerMapping.entityName, "Computer")
             XCTAssertEqual(computerMapping.context, managedObjectContext)
@@ -52,7 +52,7 @@ class CDIMappingTests: CoreDataImportKitTests {
     func testMappingForRelationshipPointsBackToItself() {
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         if let boss = mapping.entityDescription.relationshipsByName["boss"],
-            personMapping = mapping.mappingForRelationship(boss){
+            let personMapping = mapping.mappingForRelationship(boss){
 
             XCTAssertEqual(personMapping, mapping)
         }
@@ -64,7 +64,7 @@ class CDIMappingTests: CoreDataImportKitTests {
     // MARK: createManagedObjectWithRepresentation(_:)
 
     func testCreateManagedObjectWithRepresentation() {
-        let representation = [ "id": 123, "fullName": "John Doe", "age": 35 ]
+        let representation: CDIRepresentation = [ "id": 123, "fullName": "John Doe", "age": 35 ] as [String : Any]
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let managedObject = mapping.createManagedObjectWithRepresentation(representation)
@@ -81,7 +81,7 @@ class CDIMappingTests: CoreDataImportKitTests {
     }
 
     func testCreateManagedObjectWithRepresentationForEntityWithNoPrimaryKey() {
-        let representation = [ "name": "Big Store Printer" ]
+        let representation: CDIRepresentation = [ "name": "Big Store Printer" ]
 
         let mapping = CDIMapping(entityName: "Printer", inManagedObjectContext: managedObjectContext)
         let managedObject = mapping.createManagedObjectWithRepresentation(representation)
@@ -100,7 +100,7 @@ class CDIMappingTests: CoreDataImportKitTests {
 
     func testCreateManagedObjectWithPrimaryKey() {
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
-        let managedObject = mapping.createManagedObjectWithPrimaryKey(123)
+        let managedObject = mapping.createManagedObjectWithPrimaryKey(NSNumber(integerLiteral: 123))
 
         XCTAssertEqual(managedObject.entity.name!, "Person")
 
@@ -116,7 +116,7 @@ class CDIMappingTests: CoreDataImportKitTests {
     // MARK: updateManagedObjectAttributes(_:withRepresentation:)
 
     func testUpdateManagedObjectAttributesWithRepresentation() {
-        let representation = [ "id": 123, "fullName": "John Doe", "age": 35 ]
+        let representation = [ "id": 123, "fullName": "John Doe", "age": 35 ] as [String : Any]
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let managedObject = mapping.createManagedObjectWithRepresentation(representation)
@@ -135,7 +135,7 @@ class CDIMappingTests: CoreDataImportKitTests {
     }
     
     func testUpdateManagedObjectAttributesWithRepresentationWithArrayForString() {
-        let representation = [ "id": 123, "fullName": ["John", "Doe"] ]
+        let representation = [ "id": 123, "fullName": ["John", "Doe"] ] as [String : Any]
         
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let managedObject = mapping.createManagedObjectWithRepresentation(representation)
@@ -163,7 +163,7 @@ class CDIMappingTests: CoreDataImportKitTests {
             "integerAttribute": 14,
             "keyPath": [ "attributeName": "keyPathValue" ],
             "stringAttribute": "Hello world"
-        ]
+        ] as [String : Any]
 
         let mapping = CDIMapping(entityName: "EveryAttributeType", inManagedObjectContext: managedObjectContext)
         let managedObject = mapping.createManagedObjectWithRepresentation(representation)
@@ -171,17 +171,17 @@ class CDIMappingTests: CoreDataImportKitTests {
 
         XCTAssertEqual(managedObject.entity.name!, "EveryAttributeType")
 
-        let dateFormat1 = NSDateFormatter()
+        let dateFormat1 = DateFormatter()
         dateFormat1.dateFormat = "yyyy-MM-dd'T'HH:mm:ssz"
-        let dateFormat2 = NSDateFormatter()
-        dateFormat2.locale = NSLocale.currentLocale()
-        dateFormat2.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+        let dateFormat2 = DateFormatter()
+        dateFormat2.locale = NSLocale.current
+        dateFormat2.timeZone = TimeZone(secondsFromGMT: 0)
         dateFormat2.dateFormat = "MM/DD/YY"
 
         if let eat = managedObject as? EveryAttributeType {
             XCTAssertEqual(eat.booleanAttribute!, true)
-            XCTAssertEqual(eat.dateAttribute!, dateFormat1.dateFromString("2016-02-25T11:01:51-08:00"))
-            XCTAssertEqual(eat.dateAttributeCustomized!, dateFormat2.dateFromString("02/25/2016"))
+            XCTAssertEqual(eat.dateAttribute!, dateFormat1.date(from: "2016-02-25T11:01:51-08:00"))
+            XCTAssertEqual(eat.dateAttributeCustomized!, dateFormat2.date(from: "02/25/2016"))
             XCTAssertEqual(eat.decimalAttribute!, 11.2)
             XCTAssertEqual(eat.doubleAttribute!, 12.3)
             XCTAssertEqualWithAccuracy(eat.floatAttribute!.floatValue, Float(13.4), accuracy: 0.01)
@@ -197,7 +197,7 @@ class CDIMappingTests: CoreDataImportKitTests {
     // MARK: primaryKeyValueFromRepresentation(_:)
 
     func testPrimaryKeyValueFromRepresentation() {
-        let representation = [ "id": 123, "fullName": "John Doe", "age": 35 ]
+        let representation = [ "id": 123, "fullName": "John Doe", "age": 35 ] as [String : Any]
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let primaryKey = mapping.primaryKeyValueFromRepresentation(representation)
@@ -210,7 +210,7 @@ class CDIMappingTests: CoreDataImportKitTests {
     // This also tests valueFromRepresentation(_:forProperty:)
 
     func testValueFromRepresentationForPropertyNamed() {
-        let representation = [ "id": 123, "fullName": "John Doe", "companyId": 5 ]
+        let representation = [ "id": 123, "fullName": "John Doe", "companyId": 5 ] as [String : Any]
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let value = mapping.valueFromRepresentation(representation, forPropertyNamed: "name")
@@ -219,7 +219,7 @@ class CDIMappingTests: CoreDataImportKitTests {
     }
 
     func testValueFromRepresentationForPropertyNamedForRelationship() {
-        let representation = [ "id": 123, "fullName": "John Doe", "companyId": 5 ]
+        let representation = [ "id": 123, "fullName": "John Doe", "companyId": 5 ] as [String : Any]
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let value = mapping.valueFromRepresentation(representation, forPropertyNamed: "job")
@@ -228,26 +228,30 @@ class CDIMappingTests: CoreDataImportKitTests {
     }
 
     func testValueFromRepresentationForPropertyNamedWithNestedValue() {
-        let computer = [ "name": "John Smith's MacBook", "purchased": "2016-02-25T11:01:51-08:00", "cost": 1100.99 ]
+        let computer: CDIRepresentation = [ "name": "John Smith's MacBook", "purchased": "2016-02-25T11:01:51-08:00", "cost": 1100.99 ] as [String : Any]
         let representation: CDIRepresentation = [ "id": 123, "fullName": "John Doe", "computer": computer ]
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let value = mapping.valueFromRepresentation(representation, forPropertyNamed: "computer")
 
-        XCTAssertEqual((value as? CDIRepresentation)!, computer)
+        if let value: CDIRepresentation = value as? CDIRepresentation {
+            XCTAssertTrue(NSDictionary(dictionary: value).isEqual(to: computer))
+//            XCTAssertEqual(value, computer)
+        }
+        else { XCTFail() }
     }
 
     // MARK: primaryKeyValueForManagedObject(_:)
 
     func testPrimaryKeyValueForManagedObject() {
-        let representation = [ "id": 123, "fullName": "John Doe", "age": 35 ]
+        let representation = [ "id": 123, "fullName": "John Doe", "age": 35 ] as [String : Any]
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let managedObject = mapping.createManagedObjectWithRepresentation(representation)
 
         let primaryKey = mapping.primaryKeyValueForManagedObject(managedObject)
 
-        XCTAssertEqual(primaryKey, 123)
+        XCTAssertEqual(primaryKey, 123 as NSObject)
     }
 
     // MARK: extractRootFromExternalRepresentation(_:)
@@ -260,8 +264,8 @@ class CDIMappingTests: CoreDataImportKitTests {
         ]
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
-        let representation = mapping.extractRootFromExternalRepresentation(externalRepresentation)
-        XCTAssertEqual(representation as! [NSDictionary], externalRepresentation);
+        let representation: NSArray = mapping.extractRootFromExternalRepresentation(externalRepresentation as CDIExternalRepresentation) as! NSArray
+        XCTAssertEqual(representation, externalRepresentation as NSArray)
     }
 
     // MARK: represenationArrayFromExternalRepresentation(_:)
@@ -275,7 +279,8 @@ class CDIMappingTests: CoreDataImportKitTests {
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
 
-        XCTAssertEqual(mapping.represenationArrayFromExternalRepresentation(externalRepresentation), externalRepresentation)
+        let representation: NSArray = mapping.represenationArrayFromExternalRepresentation(externalRepresentation as CDIExternalRepresentation) as NSArray
+        XCTAssertEqual(representation, externalRepresentation as NSArray)
     }
 
     func testRepresenationArrayFromExternalRepresentationWithSingleRepresentation() {
@@ -283,14 +288,15 @@ class CDIMappingTests: CoreDataImportKitTests {
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
 
-        XCTAssertEqual(mapping.represenationArrayFromExternalRepresentation(externalRepresentation), [externalRepresentation])
+        let representation: NSArray = mapping.represenationArrayFromExternalRepresentation(externalRepresentation as CDIExternalRepresentation) as NSArray
+        XCTAssertEqual(representation, [externalRepresentation] as NSArray)
     }
 
     // MARK: relationshipsByName
 
     func testRelationshipsByName() {
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
-        let personEntity = NSEntityDescription.entityForName("Person", inManagedObjectContext: managedObjectContext)
+        let personEntity = NSEntityDescription.entity(forEntityName: "Person", in: managedObjectContext)
 
         XCTAssertEqual(mapping.relationshipsByName, (personEntity?.relationshipsByName)!)
     }
@@ -311,13 +317,13 @@ class CDIMappingTests: CoreDataImportKitTests {
     // MARK: Test callbacks
 
     func testCallbackShouldImportAttributeWithTrue() {
-        let externalRepresentation = [ "id": 1, "testAttribute" : "yes", "shouldImportAttribute" : true ]
+        let externalRepresentation = [ "id": 1, "testAttribute" : "yes", "shouldImportAttribute" : true ] as [String : Any]
         let mapping = CDIMapping(entityName: "Callback", inManagedObjectContext: managedObjectContext)
-        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation as CDIExternalRepresentation, mapping: mapping, context: managedObjectContext)
 
         cdiImport.importRepresentation()
 
-        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext) {
+        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1 as NSObject, inContext: managedObjectContext) {
             XCTAssertEqual(callback.id, 1)
             XCTAssertEqual(callback.calledShouldImportAttribute, true)
             XCTAssertEqual(callback.testAttribute, "yes")
@@ -328,13 +334,13 @@ class CDIMappingTests: CoreDataImportKitTests {
     }
 
     func testCallbackShouldImportAttributeWithFalse() {
-        let externalRepresentation = [ "id": 1, "testAttribute" : "yes", "shouldImportAttribute" : false ]
+        let externalRepresentation = [ "id": 1, "testAttribute" : "yes", "shouldImportAttribute" : false ] as [String : Any]
         let mapping = CDIMapping(entityName: "Callback", inManagedObjectContext: managedObjectContext)
-        let cdiImport = CDIImport(externalRepresentation: externalRepresentation, mapping: mapping, context: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: externalRepresentation as CDIExternalRepresentation, mapping: mapping, context: managedObjectContext)
 
         cdiImport.importRepresentation()
 
-        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext) {
+        if let callback: Callback = Callback.findFirstByAttribute("id", withValue: 1 as NSObject, inContext: managedObjectContext) {
             XCTAssertEqual(callback.id, 1)
             XCTAssertEqual(callback.calledShouldImportAttribute, true)
             XCTAssertNil(callback.testAttribute)

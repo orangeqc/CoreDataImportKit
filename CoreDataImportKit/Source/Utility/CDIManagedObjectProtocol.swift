@@ -10,11 +10,11 @@ import Foundation
 import CoreData
 
 @objc public protocol CDIManagedObjectProtocol {
-    optional func shouldBuildRelationship(relationship: String, withRelationshipRepresentation relationshipRepresentation: CDIExternalRepresentation, fromRepresentation representaiton: CDIRepresentation) -> Bool
-    optional func shouldImport(representation: CDIRepresentation) -> Bool
-    optional func shouldImportAttribute(attributeName: String, withData data: AnyObject, inRepresentation representation: CDIRepresentation) -> Bool
-    optional func willImport(representation: CDIRepresentation)
-    optional func didImport(representation: CDIRepresentation)
+    @objc optional func shouldBuildRelationship(_ relationship: String, withRelationshipRepresentation relationshipRepresentation: CDIExternalRepresentation, fromRepresentation representaiton: CDIRepresentation) -> Bool
+    @objc optional func shouldImport(_ representation: CDIRepresentation) -> Bool
+    @objc optional func shouldImportAttribute(_ attributeName: String, withData data: AnyObject, inRepresentation representation: CDIRepresentation) -> Bool
+    @objc optional func willImport(_ representation: CDIRepresentation)
+    @objc optional func didImport(_ representation: CDIRepresentation)
 }
 
 extension NSManagedObject : CDIManagedObjectProtocol {}

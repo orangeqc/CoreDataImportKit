@@ -15,7 +15,7 @@ public typealias CDIExternalRepresentation = AnyObject
 public typealias CDIRootRepresentation = AnyObject
 
 /// CDIRepresentation is a dictionary representing the data to be imported to a single managed object
-public typealias CDIRepresentation = [ String : NSObject ]
+public typealias CDIRepresentation = [ String : Any ]
 
 /// CDIRepresentationArray is an array of CDIRepresentation
 public typealias CDIRepresentationArray = [ CDIRepresentation ]

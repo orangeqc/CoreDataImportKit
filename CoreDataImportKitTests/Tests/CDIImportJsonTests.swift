@@ -23,12 +23,12 @@ class CDIImportJsonTests: CoreDataImportKitTests {
         super.tearDown()
     }
 
-    func representationFromJSONFile(fileName: String) -> AnyObject? {
-        let url = NSBundle(forClass: CDIImportJsonTests.self).URLForResource(fileName, withExtension: "json")
-        let data = NSData(contentsOfURL: url!)
+    func representationFromJSONFile(_ fileName: String) -> Any? {
+        let url = Bundle(for: CDIImportJsonTests.self).url(forResource: fileName, withExtension: "json")
+        let data = try? Data(contentsOf: url!)
 
         do {
-            return try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
+            return try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions())
         }
         catch {
             print("Had error")
@@ -37,7 +37,7 @@ class CDIImportJsonTests: CoreDataImportKitTests {
     }
 
     func checkForJohnSmith() {
-        if let person: Person = Person.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext) {
+        if let person: Person = Person.findFirstByAttribute("id", withValue: 1 as NSObject, inContext: managedObjectContext) {
             XCTAssertEqual(person.id, 1)
             XCTAssertEqual(person.name, "John Smith")
             XCTAssertEqual(person.age, 30)
@@ -48,12 +48,12 @@ class CDIImportJsonTests: CoreDataImportKitTests {
         }
     }
 
-    func checkForPeopleCount(count: Int) {
+    func checkForPeopleCount(_ count: Int) {
         let peopleCount = Person.countInContext(managedObjectContext)
         XCTAssertEqual(peopleCount, count)
     }
 
-    func checkForComputerCount(count: Int) {
+    func checkForComputerCount(_ count: Int) {
         let computerCount = Computer.countInContext(managedObjectContext)
         XCTAssertEqual(computerCount, count)
     }
@@ -62,7 +62,7 @@ class CDIImportJsonTests: CoreDataImportKitTests {
         let people = representationFromJSONFile("People")!
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
-        let cdiImport = CDIImport(externalRepresentation: people, mapping: mapping, context: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: people as CDIExternalRepresentation, mapping: mapping, context: managedObjectContext)
         cdiImport.importRepresentation()
 
 
@@ -90,21 +90,21 @@ class CDIImportJsonTests: CoreDataImportKitTests {
         let person = representationFromJSONFile("Person")!
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
-        let cdiImport = CDIImport(externalRepresentation: person, mapping: mapping, context: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: person as CDIExternalRepresentation, mapping: mapping, context: managedObjectContext)
         cdiImport.importRepresentation()
 
 
         checkForJohnSmith()
         checkForPeopleCount(1)
 
-        if let person: Person = Person.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext), let computer = person.computer {
+        if let person: Person = Person.findFirstByAttribute("id", withValue: 1 as NSObject, inContext: managedObjectContext), let computer = person.computer {
             XCTAssertEqual(computer.name, "John Smith's MacBook")
             XCTAssertEqual(computer.cost, 1100.99)
 
-            let dateFormat1 = NSDateFormatter()
+            let dateFormat1 = DateFormatter()
             dateFormat1.dateFormat = "yyyy-MM-dd'T'HH:mm:ssz"
 
-            XCTAssertEqual(computer.purchased, dateFormat1.dateFromString("2016-02-25T11:01:51-08:00"))
+            XCTAssertEqual(computer.purchased, dateFormat1.date(from: "2016-02-25T11:01:51-08:00"))
         }
         else {
             XCTFail()
@@ -115,7 +115,7 @@ class CDIImportJsonTests: CoreDataImportKitTests {
         let company = representationFromJSONFile("Company")!
 
         let mapping = CDIMapping(entityName: "Company", inManagedObjectContext: managedObjectContext)
-        let cdiImport = CDIImport(externalRepresentation: company, mapping: mapping, context: managedObjectContext)
+        let cdiImport = CDIImport(externalRepresentation: company as CDIExternalRepresentation, mapping: mapping, context: managedObjectContext)
 
         cdiImport.importRepresentation()
 
@@ -123,14 +123,14 @@ class CDIImportJsonTests: CoreDataImportKitTests {
         checkForPeopleCount(2)
         checkForComputerCount(2)
 
-        if let person: Person = Person.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext), let computer = person.computer {
+        if let person: Person = Person.findFirstByAttribute("id", withValue: 1 as NSObject, inContext: managedObjectContext), let computer = person.computer {
             XCTAssertEqual(computer.name, "John Smith's MacBook")
             XCTAssertEqual(computer.cost, 1100.99)
 
-            let dateFormat1 = NSDateFormatter()
+            let dateFormat1 = DateFormatter()
             dateFormat1.dateFormat = "yyyy-MM-dd'T'HH:mm:ssz"
 
-            XCTAssertEqual(computer.purchased, dateFormat1.dateFromString("2016-02-25T11:01:51-08:00"))
+            XCTAssertEqual(computer.purchased, dateFormat1.date(from: "2016-02-25T11:01:51-08:00"))
         }
         else {
             XCTFail()

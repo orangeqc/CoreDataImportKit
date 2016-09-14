@@ -25,17 +25,17 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
     // MARK: buildCacheForExternalRepresentation()
 
     func testBuildCacheForExternalRepresentation() {
-        let representation = [
+        let representation: CDIExternalRepresentation = [
             [ "id": 123, "companyId": 5 ],
             [ "id": 124, "companyId": 5 ]
-        ]
+        ] as NSArray
 
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let cache = CDIManagedObjectCache(context: managedObjectContext)
         cache.buildCacheForExternalRepresentation(representation, usingMapping: mapping)
 
         guard let companyPrimaryKeys = cache.primaryKeyValuesCache["Company"] as? Set<Int>,
-            personPrimaryKeys   = cache.primaryKeyValuesCache["Person"] as? Set<Int> else {
+            let personPrimaryKeys   = cache.primaryKeyValuesCache["Person"] as? Set<Int> else {
                 XCTFail()
                 return
         }
@@ -55,7 +55,7 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
 
         let cache = CDIManagedObjectCache(context: managedObjectContext)
 
-        cache.buildCacheForExternalRepresentation(representation, usingMapping: mapping)
+        cache.buildCacheForExternalRepresentation(representation as NSArray, usingMapping: mapping)
 
         guard let cachedObject = cache.managedObjectForRepresentation(representation[0], usingMapping: mapping) else {
                 XCTFail()
@@ -71,7 +71,7 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let cache = CDIManagedObjectCache(context: managedObjectContext)
 
-        cache.buildCacheForExternalRepresentation(representation, usingMapping: mapping)
+        cache.buildCacheForExternalRepresentation(representation as CDIExternalRepresentation, usingMapping: mapping)
 
         if cache.managedObjectForRepresentation(representation[0], usingMapping: mapping) != nil {
             XCTFail()
@@ -88,9 +88,9 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
 
         let cache = CDIManagedObjectCache(context: managedObjectContext)
 
-        cache.buildCacheForExternalRepresentation(representation, usingMapping: mapping)
+        cache.buildCacheForExternalRepresentation(representation as CDIExternalRepresentation, usingMapping: mapping)
 
-        guard let cachedObject = cache.managedObjectWithPrimaryKey(123, usingMapping: mapping) else {
+        guard let cachedObject = cache.managedObjectWithPrimaryKey(123 as NSObject, usingMapping: mapping) else {
             XCTFail()
             return
         }
@@ -107,16 +107,16 @@ class CDIManagedObjectCacheTests: CoreDataImportKitTests {
         let mapping = CDIMapping(entityName: "Person", inManagedObjectContext: managedObjectContext)
         let cache = CDIManagedObjectCache(context: managedObjectContext)
 
-        cache.buildCacheForExternalRepresentation(representation, usingMapping: mapping)
+        cache.buildCacheForExternalRepresentation(representation as CDIExternalRepresentation, usingMapping: mapping)
 
-        if let _ = cache.managedObjectWithPrimaryKey(123, usingMapping: mapping) {
+        if let _ = cache.managedObjectWithPrimaryKey(123 as NSObject, usingMapping: mapping) {
             XCTFail()
         }
 
         let managedObject = mapping.createManagedObjectWithRepresentation(representation[0])
         cache.addManagedObjectToCache(managedObject, usingMapping: mapping)
 
-        if let cachedObject = cache.managedObjectWithPrimaryKey(123, usingMapping: mapping) {
+        if let cachedObject = cache.managedObjectWithPrimaryKey(123 as NSObject, usingMapping: mapping) {
             XCTAssertEqual(managedObject, cachedObject)
         }
         else {

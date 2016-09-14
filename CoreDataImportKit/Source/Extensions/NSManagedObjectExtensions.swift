@@ -14,7 +14,7 @@ extension NSManagedObject {
     // Assumption: If you use mogenerator, this class method will be
     // overwritten with the entity name
     public class func entityName() -> NSString {
-        return NSStringFromClass(self).componentsSeparatedByString(".").last!
+        return NSString(string: NSStringFromClass(self).components(separatedBy: ".").last!)
     }
     
     public class func cdiImportFromRepresentation(externalRepresentation representation: CDIExternalRepresentation, inContext context: NSManagedObjectContext) {

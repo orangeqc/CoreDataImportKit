@@ -9,10 +9,10 @@
 import Foundation
 import CoreData
 
-public class CDIMapping {
+open class CDIMapping {
 
     /// The entity name that this mapping represents
-    public let entityName: String
+    open let entityName: String
 
     /// The local managed object context to use for all core data operations
     let context: NSManagedObjectContext
@@ -35,7 +35,7 @@ public class CDIMapping {
         self.entityName = entityName
         self.context = context
 
-        let description = NSEntityDescription.entityForName(entityName, inManagedObjectContext: context)
+        let description = NSEntityDescription.entity(forEntityName: entityName, in: context)
 
         assert(description != nil)
 
@@ -45,7 +45,7 @@ public class CDIMapping {
     }
 
     /// Creates a new mapping to represent the entity defined by the relationship
-    public func mappingForRelationship(relationship: NSRelationshipDescription) -> CDIMapping? {
+    open func mappingForRelationship(_ relationship: NSRelationshipDescription) -> CDIMapping? {
         guard let name = relationship.destinationEntity?.name else {
             assertionFailure("\(relationship) has no destination entity")
             return nil
@@ -69,14 +69,16 @@ public class CDIMapping {
 
      - returns: Newly created managed object
      */
-    public func createManagedObjectWithRepresentation(representation: CDIRepresentation) -> NSManagedObject {
+    open func createManagedObjectWithRepresentation(_ representation: CDIRepresentation) -> NSManagedObject {
 
-        let object = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: context)
+        let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: context)
 
         if let primaryKeyAttributeName = primaryKeyAttributeName,
-            representationValue = primaryKeyValueFromRepresentation(representation) {
+            let representationValue = primaryKeyValueFromRepresentation(representation) {
 
-            object.setValue(representationValue, forKey: primaryKeyAttributeName)
+            if let value: NSObject = representationValue as? NSObject {
+                object.setValue(value, forKey: primaryKeyAttributeName)
+            }
 
         }
 
@@ -93,9 +95,9 @@ public class CDIMapping {
 
      - returns: Newly created managed object
      */
-    public func createManagedObjectWithPrimaryKey(primaryKey: NSObject) -> NSManagedObject {
+    open func createManagedObjectWithPrimaryKey(_ primaryKey: NSObject) -> NSManagedObject {
 
-        let object = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: context)
+        let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: context)
 
         if let primaryKeyAttributeName = primaryKeyAttributeName {
             object.setValue(primaryKey, forKey: primaryKeyAttributeName)
@@ -111,13 +113,13 @@ public class CDIMapping {
      - parameter managedObject:  NSManagedObject to update.
      - parameter representation: Dictionary to use to update the attributes.
      */
-    public func updateManagedObjectAttributes(managedObject: NSManagedObject, withRepresentation representation: CDIRepresentation) {
+    open func updateManagedObjectAttributes(_ managedObject: NSManagedObject, withRepresentation representation: CDIRepresentation) {
 
         for (attributeName, attributeDescription) in entityDescription.attributesByName {
 
 
             // Grab the value from the representation
-            if var representationValue: NSObject = valueFromRepresentation(representation, forProperty: attributeDescription) {
+            if var representationValue: NSObject = valueFromRepresentation(representation, forProperty: attributeDescription) as! NSObject? {
 
                 let attributeType = attributeDescription.attributeType
 
@@ -127,17 +129,17 @@ public class CDIMapping {
                 // TODO: Support all attribute types
                 // This is based on NSAttributeDescription+MagicalDataImport's
                 // MR_valueForKeyPath:fromObjectData:
-                if attributeType == .DateAttributeType {
-                    representationValue = dateFromRepresentationValue(representationValue, forAttribute:attributeDescription)!
+                if attributeType == .dateAttributeType {
+                    representationValue = dateFromRepresentationValue(representationValue, forAttribute:attributeDescription)! as NSDate
                 }
-                else if attributeType == .StringAttributeType &&
-                    representationValue.isKindOfClass(NSString) == false &&
-                    representationValue.isKindOfClass(NSNull) == false {
-                    representationValue = representationValue.description
+                else if attributeType == .stringAttributeType &&
+                    representationValue.isKind(of: NSString.self) == false &&
+                    representationValue.isKind(of: NSNull.self) == false {
+                    representationValue = NSString(string: representationValue.description)
                 }
 
                 // Only set the new value if it is different from the old value
-                if let oldValue = managedObject.valueForKey(attributeName) where oldValue as! NSObject == representationValue {
+                if let oldValue = managedObject.value(forKey: attributeName) , oldValue as! NSObject == representationValue {
                     continue
                 }
                 else {
@@ -160,7 +162,7 @@ public class CDIMapping {
 
      - returns: NSObject of the primary key
      */
-    public func primaryKeyValueFromRepresentation(representation: CDIRepresentation) -> NSObject? {
+    open func primaryKeyValueFromRepresentation(_ representation: CDIRepresentation) -> Any? {
         return valueFromRepresentation(representation, forPropertyNamed: primaryKeyAttributeName!)
     }
 
@@ -172,7 +174,7 @@ public class CDIMapping {
 
      - returns: NSObject of the value
      */
-    public func valueFromRepresentation(representation: CDIRepresentation, forPropertyNamed propertyName: String) -> NSObject? {
+    open func valueFromRepresentation(_ representation: CDIRepresentation, forPropertyNamed propertyName: String) -> Any? {
         if let property = entityDescription.propertiesByName[propertyName] {
             return valueFromRepresentation(representation, forProperty: property)
         }
@@ -188,9 +190,9 @@ public class CDIMapping {
 
      - returns: Primary key
      */
-    public func primaryKeyValueForManagedObject(object: NSManagedObject) -> NSObject? {
+    open func primaryKeyValueForManagedObject(_ object: NSManagedObject) -> NSObject? {
         if let primaryKeyAttributeName = primaryKeyAttributeName {
-            return object.valueForKey(primaryKeyAttributeName) as? NSObject
+            return object.value(forKey: primaryKeyAttributeName) as? NSObject
         }
         else {
             return nil
@@ -207,7 +209,7 @@ public class CDIMapping {
      - returns: Array of dictionaries which represent objects.
 
      */
-    public func extractRootFromExternalRepresentation(externalRepresentation: CDIExternalRepresentation) -> CDIRootRepresentation {
+    open func extractRootFromExternalRepresentation(_ externalRepresentation: CDIExternalRepresentation) -> CDIRootRepresentation {
         return externalRepresentation;
     }
 
@@ -223,7 +225,7 @@ public class CDIMapping {
 
      - returns: CDIRepresentationArray
      */
-    public func represenationArrayFromExternalRepresentation(externalRepresentation: CDIExternalRepresentation) -> CDIRepresentationArray {
+    open func represenationArrayFromExternalRepresentation(_ externalRepresentation: CDIExternalRepresentation) -> CDIRepresentationArray {
 
         let representation = extractRootFromExternalRepresentation(externalRepresentation)
         var representationArray: CDIRepresentationArray = []
@@ -239,7 +241,7 @@ public class CDIMapping {
     }
 
     /// Returns relationshipsByName from the entity description.
-    public var relationshipsByName: [String : NSRelationshipDescription] {
+    open var relationshipsByName: [String : NSRelationshipDescription] {
         get {
             return entityDescription.relationshipsByName
         }
@@ -255,12 +257,12 @@ public class CDIMapping {
 
      - returns: Value found at the key path
      */
-    func valueFromRepresentation(let representation: CDIRepresentation, forProperty property: NSPropertyDescription) -> NSObject? {
+    func valueFromRepresentation(_ representation: CDIRepresentation, forProperty property: NSPropertyDescription) -> Any? {
         var newRepresentation = representation
-        var keys = lookupKeyForProperty(property).componentsSeparatedByString(".")
+        var keys = lookupKeyForProperty(property).components(separatedBy: ".")
         var key = keys.removeFirst()
 
-        // Dig into each nested dictionary until there is no more
+        // Dig into each nested dictionary until there are no more
         while !keys.isEmpty, let newRep = newRepresentation[key] as? CDIRepresentation {
             key = keys.removeFirst()
             newRepresentation = newRep
@@ -280,8 +282,8 @@ public class CDIMapping {
      - Note: This isn't an extension on NSPropertyDescription because, at least right now, we don't
      want to leak API to other classes.
      */
-    func lookupKeyForProperty(property: NSPropertyDescription) -> String {
-        if let userInfo = property.userInfo, mappedKeyName = userInfo["mappedKeyName"] as? String {
+    func lookupKeyForProperty(_ property: NSPropertyDescription) -> String {
+        if let userInfo = property.userInfo, let mappedKeyName = userInfo["mappedKeyName"] as? String {
             return mappedKeyName
         }
 
@@ -297,14 +299,14 @@ public class CDIMapping {
 
      - returns: Returns a date optional
      */
-    func dateFromRepresentationValue(representationValue: NSObject, forAttribute attribute:NSAttributeDescription) -> NSDate? {
-        let dateFormater = NSDateFormatter()
-        dateFormater.locale = NSLocale.currentLocale()
-        dateFormater.timeZone = NSTimeZone(forSecondsFromGMT: 0)
-        dateFormater.dateFormat = (attribute.userInfo?["dateFormat"] as? String) ?? "yyyy-MM-dd'T'HH:mm:ssz"
+    func dateFromRepresentationValue(_ representationValue: NSObject, forAttribute attribute:NSAttributeDescription) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = NSLocale.current
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        dateFormatter.dateFormat = (attribute.userInfo?["dateFormat"] as? String) ?? "yyyy-MM-dd'T'HH:mm:ssz"
 
         if let dateString = representationValue as? String {
-            return dateFormater.dateFromString(dateString)
+            return dateFormatter.date(from: dateString)
         }
         else {
             return nil

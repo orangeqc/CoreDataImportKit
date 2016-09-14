@@ -13,46 +13,44 @@ import CoreDataImportKit
 class Callback: NSManagedObject {
 
 
-    func shouldBuildRelationship(relationship: String, withRelationshipRepresentation relationshipRepresentation: CDIExternalRepresentation, fromRepresentation representaiton: CDIRepresentation) -> Bool {
+    func shouldBuildRelationship(_ relationship: String, withRelationshipRepresentation relationshipRepresentation: CDIExternalRepresentation, fromRepresentation representaiton: CDIRepresentation) -> Bool {
         self.calledShouldBuildRelationship = true
 
-        if let buildRelationship: Bool = (representaiton["shouldBuildRelationship"] as? NSNumber)!.boolValue {
-            return buildRelationship
+        if let shouldBuildRelationship = representaiton["shouldBuildRelationship"] as? NSNumber {
+            return shouldBuildRelationship.boolValue
         }
         else {
             return false
         }
     }
 
-    func shouldImport(representation: CDIRepresentation) -> Bool {
+    func shouldImport(_ representation: CDIRepresentation) -> Bool {
         self.calledShouldImport = true
         
-        if let shouldImportNumber: NSNumber = (representation["shouldImport"] as? NSNumber),
-            shouldImport: Bool = shouldImportNumber.boolValue {
-            return shouldImport
+        if let shouldImportNumber = representation["shouldImport"] as? NSNumber {
+            return shouldImportNumber.boolValue
         }
         else {
             return true
         }
     }
 
-    func shouldImportAttribute(attributeName: String, withData data: AnyObject, inRepresentation representation: CDIRepresentation) -> Bool {
+    func shouldImportAttribute(_ attributeName: String, withData data: AnyObject, inRepresentation representation: CDIRepresentation) -> Bool {
         self.calledShouldImportAttribute = true
 
-        if let shouldImportAttributeNumber: NSNumber = (representation["shouldImportAttribute"] as? NSNumber),
-            shouldImportAttribute: Bool = shouldImportAttributeNumber.boolValue {
-                return shouldImportAttribute
+        if let shouldImportAttributeNumber = representation["shouldImportAttribute"] as? NSNumber {
+                return shouldImportAttributeNumber.boolValue
         }
         else {
             return true
         }
     }
 
-    func willImport(representation: CDIRepresentation) {
-        self.calledWillImport = NSNumber(bool: true)
+    func willImport(_ representation: CDIRepresentation) {
+        self.calledWillImport = NSNumber(value: true)
     }
 
-    func didImport(representation: CDIRepresentation) {
-        self.calledDidImport = NSNumber(bool: true)
+    func didImport(_ representation: CDIRepresentation) {
+        self.calledDidImport = NSNumber(value: true)
     }
 }

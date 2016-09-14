@@ -21,19 +21,19 @@ class CoreDataImportKitTests: XCTestCase {
         super.setUp()
 
         // This resource is the same name as your xcdatamodeld contained in your project.
-        guard let modelURL = NSBundle(forClass: self.dynamicType).URLForResource("CDICoreData", withExtension:"momd") else {
+        guard let modelURL = Bundle(for: type(of: self)).url(forResource: "CDICoreData", withExtension:"momd") else {
             fatalError("Error loading model from bundle")
         }
         // The managed object model for the application. It is a fatal error for the application not to be able to find and load its model.
-        guard let mom = NSManagedObjectModel(contentsOfURL: modelURL) else {
+        guard let mom = NSManagedObjectModel(contentsOf: modelURL) else {
             fatalError("Error initializing mom from: \(modelURL)")
         }
         let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
-        managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = psc
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+        DispatchQueue.global(qos: .background).async {
             do {
-                try psc.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
+                try psc.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
             } catch {
                 fatalError("Error migrating store: \(error)")
             }

@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-public class CDIImport {
+open class CDIImport {
 
     /// Cache the import uses to pre-fetch managed objects
     let cache: CDIManagedObjectCache
@@ -41,13 +41,13 @@ public class CDIImport {
     }
 
     /// Imports attributes and builds relationships for the represetnation
-    public func importRepresentation() {
+    open func importRepresentation() {
         importAttributes()
         buildRelationships()
     }
 
     /// Imports attributes for the representation. This will not build relationships.
-    public func importAttributes() {
+    open func importAttributes() {
 
         let representations = baseMapping.represenationArrayFromExternalRepresentation(externalRepresentation)
 
@@ -58,7 +58,7 @@ public class CDIImport {
     }
 
     /// Builds the relationships for the representation. Can only be used after importing attributes.
-    public func buildRelationships() {
+    open func buildRelationships() {
 
         let representations = baseMapping.represenationArrayFromExternalRepresentation(externalRepresentation)
 
@@ -74,7 +74,7 @@ public class CDIImport {
      - parameter representation: Representation to import
      - parameter mapping:        Mapping used to get the data from the representation
      */
-    func importAttributesForRepresentation(representation: CDIRepresentation, usingMapping mapping: CDIMapping) {
+    func importAttributesForRepresentation(_ representation: CDIRepresentation, usingMapping mapping: CDIMapping) {
 
         // Ask the cache for the managed object
         var managedObjectOptional = cache.managedObjectForRepresentation(representation, usingMapping: mapping)
@@ -111,7 +111,7 @@ public class CDIImport {
      - parameter representation: Representation of the object to build relationships of.
      - parameter mapping:        Mapping which will be used to find the relationships in the representation.
      */
-    func buildRelationshipsForRepresentation(representation: CDIRepresentation, usingMapping mapping: CDIMapping) {
+    func buildRelationshipsForRepresentation(_ representation: CDIRepresentation, usingMapping mapping: CDIMapping) {
 
         // Ask the cache for the managed object, do nothing if it isn't found
         guard let managedObject = cache.managedObjectForRepresentation(representation, usingMapping: mapping) else {
@@ -145,7 +145,7 @@ public class CDIImport {
 
                     // Build the to-many relationship on the managedObject
                     if let relatedManagedObject = cache.managedObjectForRepresentation(relationshipRepresentation, usingMapping: destinationEntityMapping) {
-                        managedObject.mutableSetValueForKey(relationshipName).addObject(relatedManagedObject)
+                        managedObject.mutableSetValue(forKey: relationshipName).add(relatedManagedObject)
                     }
 
                 }
@@ -166,7 +166,7 @@ public class CDIImport {
             }
 
             // To-one relationship where we only have the value of the foreign key
-            else {
+            else if let representationValue = representationValue as? NSObject {
 
                 // Ask cache for existing object
                 var relatedManagedObject = cache.managedObjectWithPrimaryKey(representationValue, usingMapping: destinationEntityMapping)

@@ -22,12 +22,12 @@ class NSManagedObjectExtensionsTests: CoreDataImportKitTests {
     }
 
     func testImportRepresentation() {
-        let externalRepresentation = [ [ "id" : 1, "fullName" : "John Smith", "age": 30, "companyId": 5 ] ]
+        let externalRepresentation: CDIExternalRepresentation = [ [ "id" : 1, "fullName" : "John Smith", "age": 30, "companyId": 5 ] ]
         
         Person.cdiImportFromRepresentation(externalRepresentation: externalRepresentation, inContext: managedObjectContext)
         
-        if let person: Person = Person.findFirstByAttribute("id", withValue: 1, inContext: managedObjectContext),
-            company: Company = Company.findFirstByAttribute("id", withValue: 5, inContext: managedObjectContext) {
+        if let person: Person = Person.findFirst(by: "id", withValue: 1, inContext: managedObjectContext),
+            let company: Company = Company.findFirst(by: "id", withValue: 5, inContext: managedObjectContext) {
             XCTAssertEqual(company.id, 5)
             XCTAssertEqual(person.job, company)
         }

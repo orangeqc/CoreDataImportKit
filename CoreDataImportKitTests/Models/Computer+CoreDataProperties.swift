@@ -14,7 +14,7 @@ import CoreData
 
 extension Computer {
 
-    @NSManaged var purchased: NSDate?
+    @NSManaged var purchased: Date?
     @NSManaged var cost: NSNumber?
     @NSManaged var name: String?
     @NSManaged var owner: Person?

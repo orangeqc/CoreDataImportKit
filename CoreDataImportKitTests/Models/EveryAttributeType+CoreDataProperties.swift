@@ -15,8 +15,8 @@ import CoreData
 extension EveryAttributeType {
 
     @NSManaged var booleanAttribute: NSNumber?
-    @NSManaged var dateAttribute: NSDate?
-    @NSManaged var dateAttributeCustomized: NSDate?
+    @NSManaged var dateAttribute: Date?
+    @NSManaged var dateAttributeCustomized: Date?
     @NSManaged var decimalAttribute: NSDecimalNumber?
     @NSManaged var doubleAttribute: NSNumber?
     @NSManaged var floatAttribute: NSNumber?
